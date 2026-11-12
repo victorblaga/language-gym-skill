@@ -48,6 +48,25 @@ explicit estimate/budget input rather than labelling the recording free.
 [pricing](https://azure.microsoft.com/en-us/pricing/details/speech/),
 [official REST API](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/rest-text-to-speech).
 
+**OpenAI:** `--provider openai` uses `gpt-realtime-2.1-mini` through the Realtime
+API with a local `OPENAI_API_KEY`. Inspect `voices --provider openai --language
+hr`, then choose explicit learner and partner voices. Each contiguous speaking
+turn uses a fresh, bounded response; the CLI checks its returned transcript
+against the supplied text before accepting the audio. Saved responses can be
+recovered without buying them again. A mismatch or unknown paid outcome stops
+rendering; do not discard the ledger to retry.
+
+For example, use `render DIR --provider openai --learner-voice cedar
+--partner-voice marin --budget-usd 0.90 --env-file /path/to/keys.env`. Keys stay on
+the learner's machine. Claimed subscription credits still require the matching
+API organization's credentials and available model access; a model listing
+alone does not verify a credit balance. The older `tts-1`, `tts-1-hd` and
+`gpt-4o-mini-tts` Speech API models retire on 6 January 2027; this adapter uses
+the documented Realtime workflow.
+[Speech guide](https://developers.openai.com/api/docs/guides/text-to-speech),
+[Realtime conversations](https://developers.openai.com/api/docs/guides/realtime-conversations),
+[pricing](https://developers.openai.com/api/docs/pricing).
+
 ## Other available tools
 
 If an actual host tool can return a downloadable recording with the required
@@ -63,15 +82,6 @@ assumed from the Edge browser feature. Do not install or choose it silently.
 Its SRT output still needs real MMS-FA alignment for this app.
 [Upstream tool](https://github.com/rany2/edge-tts),
 [Microsoft Read Aloud](https://support.microsoft.com/en-us/edge/use-immersive-reader-in-microsoft-edge).
-
-For OpenAI speech, use a genuinely available host tool or existing recording.
-Eligible ChatGPT Pro/Business subscriptions can claim API credits linked to an
-API organization, but still need that organization's API credentials. The legacy
-`tts-1`, `tts-1-hd` and `gpt-4o-mini-tts` Speech API models are scheduled to retire
-on 6 January 2027; the documented Realtime replacement is a different workflow.
-Do not invent a drop-in model substitution or promise this release has a direct
-OpenAI rendering adapter. [API credits](https://developers.openai.com/api/docs/guides/chatgpt-api-credits),
-[speech guide](https://developers.openai.com/api/docs/guides/text-to-speech).
 
 ## Honest accounting
 

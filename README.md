@@ -56,33 +56,43 @@ private server implementation or learner data.
 
 ## Optional app connection
 
-Sign in normally and create a named connection token in Settings. Choose:
+Run `auth login --app https://YOUR_LANGUAGE_GYM_APP`. Sign into the app in your
+browser, check the account and matching connection code, then approve. On a
+remote machine use `--no-browser` and open the printed link yourself. Choose:
 
 - `context:read` for selected-language level, recorded facts, islands and lesson
   summaries.
 - `lessons:import` for adding complete private lessons.
 
-Supply the token through CLI stdin, never a command argument. Its protected
-config is outside lesson workspaces and bound to the exact app origin. Tokens
+The CLI saves the token in protected config outside lesson workspaces, bound to
+the exact app origin. Use `auth status` to check it and `auth logout` to revoke
+it. Manually created Settings tokens can still be supplied through CLI stdin,
+never a command argument. Tokens
 expire and can be revoked; they grant no Studio, public publication, account
 management or practice-progress permissions.
 
-The agent can read context, prepare a lesson locally and use `import`, or leave
-a ZIP for manual **Import lesson** in the app. ZIPs exclude credentials, source
-interviews and private provider-operation files.
+The agent discovers your saved connection with `auth status`, reads your level
+and learning context, prepares the lesson locally, then imports it privately by
+default. It returns the lesson title and app link while keeping the ZIP as a
+backup. Ask for a ZIP only or no upload to keep the work local. Multiple saved
+apps require an explicit choice; a read-only connection cannot upload.
+ZIPs exclude credentials, source interviews and private provider-operation files.
 
 ## Try it
 
 Ask your agent: “Use generate-lesson to interview me about describing my job in
 Croatian at B2. Let me develop connected answers, use natural everyday speech,
 and show me the draft before audio. Use my chosen speech provider with an
-explicit budget, then prepare a ZIP for my connected Language Gym account.”
+explicit budget, then add the finished lesson to my connected Language Gym account.”
 
 Existing text and recordings are supported too. Honor explicit requests to
 preserve an original rather than adapting it into a new dialogue.
 
-The CLI supports local Gemini and official Azure Speech, plus audio from other
-available tools. Choose voices using actual language support and listening
+The CLI supports local Gemini, OpenAI Realtime and official Azure Speech, plus
+audio from other available tools. An explicit `--env-file PATH` loads your own
+API keys locally; app login and speech credentials are separate. Two-speaker
+Gemini lessons automatically use your profile's male/female voice pairing,
+defaulting to Orus and Kore when no profile defaults exist. Choose voices using actual language support and listening
 preferences; do not assume a subscription grants API credentials or credits.
 See [speech choices](skills/generate-lesson/references/speech.md) and
 [workspace examples](skills/generate-lesson/references/workspace.md).
