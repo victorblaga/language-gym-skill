@@ -71,16 +71,19 @@ never a command argument. Tokens
 expire and can be revoked; they grant no Studio, public publication, account
 management or practice-progress permissions.
 
-The agent can read context, prepare a lesson locally and use `import`, or leave
-a ZIP for manual **Import lesson** in the app. ZIPs exclude credentials, source
-interviews and private provider-operation files.
+The agent discovers your saved connection with `auth status`, reads your level
+and learning context, prepares the lesson locally, then imports it privately by
+default. It returns the lesson title and app link while keeping the ZIP as a
+backup. Ask for a ZIP only or no upload to keep the work local. Multiple saved
+apps require an explicit choice; a read-only connection cannot upload.
+ZIPs exclude credentials, source interviews and private provider-operation files.
 
 ## Try it
 
 Ask your agent: “Use generate-lesson to interview me about describing my job in
 Croatian at B2. Let me develop connected answers, use natural everyday speech,
 and show me the draft before audio. Use my chosen speech provider with an
-explicit budget, then prepare a ZIP for my connected Language Gym account.”
+explicit budget, then add the finished lesson to my connected Language Gym account.”
 
 Existing text and recordings are supported too. Honor explicit requests to
 preserve an original rather than adapting it into a new dialogue.

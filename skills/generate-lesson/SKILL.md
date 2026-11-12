@@ -19,7 +19,12 @@ this public skill repository supplies the reusable workflow and references.
 For developers with a separate app checkout, the equivalent is
 `npm run lesson -- ...` from that checkout.
 
-App connection is optional. For a connected workflow run `auth login --app URL`.
+Start with `auth status` to discover the saved app and check the account, expiry
+and scopes without reading its token file. A single saved app is selected
+automatically. If several are saved, ask which app to use and pass `--app URL`;
+never guess a destination. An explicitly requested app always takes precedence.
+For an unconnected workflow run `auth login --app URL` when the user supplies
+the app address.
 The human signs into Language Gym in their browser, checks the account,
 permissions and matching connection code, and approves. Use `--no-browser` on
 remote/headless machines and present the printed link. `auth status --app URL`
@@ -27,7 +32,10 @@ checks the connection; `auth logout --app URL` revokes it. `context:read` allows
 reading learning context; `lessons:import` allows adding prepared private
 lessons. A manual Settings token with `auth set --app URL --token-stdin` remains
 available. Keep tokens outside lesson files, shell arguments, transcripts and
-ZIPs. Fetch `context` for only the requested language and keep it locally.
+ZIPs. Fetch `context --app URL --language CODE --output FILE` for only the
+requested language and use its level, facts and islands. Name the destination
+account briefly when starting a connected lesson. Do not require the learner to
+repeat their app address or profile when the saved connection provides them.
 
 The workflow can start without an account, cloud database or app connection.
 Use `init` to create a new local workspace; refuse to overwrite existing work.
@@ -103,9 +111,21 @@ Run `validate --ready` and `pack`. The CLI includes only the explicit lesson,
 audio, lexicon and alignment artifacts; credentials, source interviews and local
 provider ledgers stay out of the ZIP. Do not add files recursively yourself.
 
-Deliver the ready ZIP and honestly report provider, known/estimated cost and
-checks performed. When the user requested upload and a suitable connection is
-configured, use `import` into their private account and report its returned
-lesson URL. Otherwise leave the ZIP for manual Import lesson in the app.
+When connected with `lessons:import`, finish a lesson by running
+`import FILE.zip --app URL`, adding `--island ID` for the relevant existing
+island from the requested language's context. Uploading the finished private
+lesson is the default connected workflow; do not stop at handing over a ZIP or
+ask separately whether to upload. Honor an explicit ZIP-only, preview-only,
+offline or no-upload request. If the destination island is ambiguous, leave it
+unassigned rather than changing an unrelated island.
+
+Wait for the server's successful import response before reporting the lesson
+as added. Report its title, app link and returned unit ID, plus provider,
+known/estimated cost and checks performed. Keep the ZIP as a backup. On an
+uncertain upload outcome, check `status BUNDLE_UUID --app URL` or retry the
+same ZIP; do not rotate its ID or regenerate paid audio to retry an upload.
+Without an import-capable connection, deliver the ZIP and explain the missing
+connection or permission. Do not silently use a different account or increase
+token permissions.
 Import adds content; it must not create practice progress or overwrite an
 existing lesson. Retain the workspace and ledger for reproducible revisions.
