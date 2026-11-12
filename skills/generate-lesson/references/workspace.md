@@ -85,6 +85,87 @@ text/translations and invalid rows are pending too. `sentenceCount`,
 `completeCount` and `remainingCount` describe the whole draft, even when only
 five sentences are returned. Keep batching until none remain, then validate.
 
+## Languages with readings
+
+The selected-language context's `language.romanization` is authoritative:
+`{ "scheme": "pinyin", "label": "Pinyin" }`, with optional `variety` for a
+chosen spoken variety. `workspace.json` stores the same shape under
+`targetLanguage.romanization`. `init --language zh` selects pinyin automatically.
+For another agreed convention, use `--romanization-scheme ID
+--romanization-label NAME`, and `--variety NAME` where applicable. Arabic
+requires both an agreed convention and spoken variety. Reuse the saved setup;
+workspace flags do not change the connected learner's language settings, and
+an import must agree with those settings.
+
+Add a reading to each draft sentence using the exact original as `sourceText`:
+
+```json
+{
+  "id": "s1", "paragraph": "p1",
+  "text": "我喜欢喝茶。", "translation": "I like drinking tea.",
+  "romanization": {
+    "scheme": "pinyin", "text": "Wǒ xǐhuan hē chá.",
+    "sourceText": "我喜欢喝茶。"
+  }
+}
+```
+
+This example omits dialogue speaker fields only for brevity; retain them in a
+dialogue draft. Run `tokens` after authoring the draft. Its `sourceText`, exact
+token surfaces, indices and `romanization` configuration describe the material
+to annotate; `romanizationRequired` identifies required readings. Carry the
+reported `tokenizerVersion` into the lexicon: configured romanized lessons
+always use `tokenizerVersion: 2`, including Mandarin. This version preserves
+combining marks within tokens. Do not split vocalized Arabic or Mandarin words
+independently of the CLI's indices. Existing lessons without a reading
+configuration retain their legacy indexing.
+
+For that Mandarin sentence, the batch entry's `lexicon` has this shape. Keep the
+`sentenceHash` returned by `tokens` in its surrounding entry as above:
+
+```json
+{
+  "sentenceId": "s1",
+  "tokenizerVersion": 2,
+  "words": [
+    { "i": 0, "gloss": "I", "lemma": "我", "pos": "pronoun", "form": "subject",
+      "romanization": { "scheme": "pinyin", "text": "wǒ", "sourceText": "我" } },
+    { "i": 1, "gloss": "to like", "lemma": "喜", "pos": "bound morpheme", "form": "first character of 喜欢",
+      "romanization": { "scheme": "pinyin", "text": "xǐ", "sourceText": "喜" } },
+    { "i": 2, "gloss": "joy", "lemma": "欢", "pos": "bound morpheme", "form": "second character of 喜欢",
+      "romanization": { "scheme": "pinyin", "text": "huan", "sourceText": "欢" } },
+    { "i": 3, "gloss": "to drink", "lemma": "喝", "pos": "verb", "form": "uninflected", "exprIds": ["drink-tea"],
+      "romanization": { "scheme": "pinyin", "text": "hē", "sourceText": "喝" } },
+    { "i": 4, "gloss": "tea", "lemma": "茶", "pos": "noun", "form": "object", "exprIds": ["drink-tea"],
+      "romanization": { "scheme": "pinyin", "text": "chá", "sourceText": "茶" } }
+  ],
+  "groups": [
+    { "indices": [1, 2], "gloss": "to like", "lemma": "喜欢", "pos": "verb", "form": "uninflected",
+      "romanization": { "scheme": "pinyin", "text": "xǐhuan", "sourceText": "喜欢" } }
+  ],
+  "expressions": [
+    { "id": "drink-tea", "indices": [3, 4], "canonical": "喝茶", "meaning": "to drink tea",
+      "romanization": { "scheme": "pinyin", "text": "hē chá", "sourceText": "喝茶" } }
+  ]
+}
+```
+
+`groups` defines whole words spanning two or more contiguous token indices;
+groups must be sorted and cannot overlap. Retain their underlying `words` as
+the displayed constituent breakdown. Uncovered tokens use their own word
+entry, so do not duplicate them as singleton groups. Group `sourceText` is the
+exact original surface spanning its indices, including any marks or separators;
+word `sourceText` is its exact token surface. Expression `sourceText` equals
+its displayed `canonical`, which can differ from the sentence's inflected form.
+Every reading's scheme must match the language setup. Author all required
+readings before validation; do not copy a new `sourceText` onto an old reading
+to bypass staleness checks.
+
+The CLI packages reading-bearing lessons as prepared format v2; older v1-only
+readers cannot import them. Keep using the CLI's validation and packing rather
+than changing a bundle version or manifest by hand. Existing lessons without
+readings retain the v1 contract.
+
 Run `validate DIR` before audio work. After `audio --file` or `render`, use
 `align` to generate `alignment-input.json`, `alignment.json` and timed
 `lesson.json`. Then `validate DIR --ready` and `pack DIR --output FILE.zip`.

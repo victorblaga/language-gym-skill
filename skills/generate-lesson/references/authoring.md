@@ -28,6 +28,45 @@ prefixes, stage directions, parenthetical notes, slashes, pronunciation guidance
 and translations out of it. Naturally borrowed words are fine. Put idiomatic
 base-language meanings in `translation`; avoid word-for-word calques.
 
+## Readings and word boundaries
+
+Use the reading convention and spoken variety recorded for the selected
+language. Mandarin uses pinyin automatically, with tone marks, ü, ordinary
+word spacing and unmarked neutral tones: `我喜欢喝茶。` →
+`Wǒ xǐhuan hē chá.` Do not ask the learner to approve the established standard.
+For a meaningful first-language setup choice, explain what changes in practice,
+recommend one option and ask one question at a time. For example, Arabic needs
+a spoken variety and a consistent named learner-friendly convention; `ar` and
+unvowelled script do not establish either. Reuse recorded choices on later
+lessons. A display preference does not change the authored convention.
+
+Create readings with the rest of the lesson using your own language capability.
+Every sentence, lookup word, expression and displayed constituent needs a
+reading when the language is configured to use one. Choose the pronunciation
+in the actual context, including ambiguous characters and inflected forms.
+A card's reading belongs to its precise displayed original form; do not derive
+it by slicing sentence pinyin or reading a different dictionary form. Keep
+readings in their dedicated fields. Speech and alignment use only the original
+target-language text, never readings or constituent explanations.
+
+Use the CLI's stable token indices to author meaningful whole-word groups.
+Mandarin character tokens are indexing units, not automatically words: group
+`火车` as `huǒchē` / `train`, then explain its constituents `火` / `huǒ` / `fire`
+and `车` / `chē` / `vehicle`. The whole-word meaning is primary; constituent
+meanings explain its parts and need not add up to its contextual meaning.
+Supply useful parts for other languages where appropriate; do not invent a
+decomposition for every word or guess word boundaries from sentence readings.
+
+Generate these fields during the existing draft and vocabulary stages, including
+requested revisions. Regenerating original text also regenerates its associated
+readings and breakdowns, bound to that exact text. A translation-only change
+does not invalidate a sentence reading; it can still require updated vocabulary.
+Use the existing preparation/validation flow for incomplete or stale output.
+Do not add a separate pronunciation approval, manual review or direct editing
+workflow. Validation checks source identity and completeness; it cannot prove
+pronunciation accuracy. Readings alone do not establish speech-provider or
+MMS-FA support for a language or variety.
+
 ## One cohesive conversation
 
 For a new B1–C2 conversation, write one continuous, realistic interaction in the
