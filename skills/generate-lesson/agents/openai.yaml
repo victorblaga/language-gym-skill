@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Language Gym lesson"
+  short_description: "Prepare and import an aligned lesson with your own tools"
+  default_prompt: "Use $generate-lesson to create a Language Gym lesson from my topic or source material."
