@@ -45,8 +45,10 @@ https://YOUR_LANGUAGE_GYM_APP/downloads/language-gym-lesson.zip
 ```
 
 Extract it and run `node /path/to/language-gym-lesson.mjs help`, then `doctor`.
-It requires Node 24+ and ffprobe. The download includes the local MMS-FA aligner
-source and exact Docker setup in `aligner/README.md`. A copied workspace can
+It requires Node 24+ and host ffmpeg/ffprobe. `doctor` checks Docker, Compose,
+daemon access and compatible aligner readiness. The download includes the local
+MMS-FA aligner source and portable Docker setup in `aligner/README.md`, including
+the first model download and persistent cache. A copied workspace can
 adopt existing audio, align, validate and pack without an app account or paid
 model call once the local tools/model are installed.
 
@@ -77,6 +79,9 @@ default. It returns the lesson title and app link while keeping the ZIP as a
 backup. Ask for a ZIP only or no upload to keep the work local. Multiple saved
 apps require an explicit choice; a read-only connection cannot upload.
 ZIPs exclude credentials, source interviews and private provider-operation files.
+Authoring uses that context and the selected workspace, not an application
+checkout or an old local database. Vocabulary is saved in validated, resumable
+sentence batches; an approved draft continues through recording and delivery.
 
 ## Try it
 
@@ -96,3 +101,8 @@ defaulting to Orus and Kore when no profile defaults exist. Choose voices using 
 preferences; do not assume a subscription grants API credentials or credits.
 See [speech choices](skills/generate-lesson/references/speech.md) and
 [workspace examples](skills/generate-lesson/references/workspace.md).
+
+First-use setup helps choose speech: Gemini via an API key or existing Google
+Cloud login, another configured provider, or no-key online `edge-tts` / existing
+audio. Edge speech is an optional external recording source; Google is not
+required. The agent checks local alignment prerequisites before recording.
