@@ -67,6 +67,14 @@ information that matters. Do not make them repeat facts already supplied.
 For source material, establish whether they want faithful preservation,
 adaptation to their level, or several focused lessons.
 
+Reuse the selected language's recorded reading convention and spoken variety.
+For Mandarin, use pinyin with tone marks automatically; do not ask whether to
+use it. When starting a language with a meaningful choice, such as Arabic's
+spoken variety or romanization convention, explain the practical difference,
+recommend one and ask one question at a time. Reuse that selection for later
+lessons rather than reopening it. See [authoring rules](references/authoring.md)
+for readings, word boundaries and constituent meanings.
+
 Read [authoring rules](references/authoring.md) before creating or adapting a
 draft and when writing its contextual vocabulary. These carry the app's spoken
 register, conversation, casting and lexicon requirements. Read
@@ -87,7 +95,10 @@ entries in a batch JSON file, then `lexicon merge DIR --file BATCH.json` to
 validate and save them atomically. Repeat until `remainingCount` is zero.
 Every token needs its contextual gloss, lemma, part of speech and grammatical
 form. Include useful multi-word expressions, split/reflexive constructions and
-shared tokens. Read [workspace files](references/workspace.md) for the format.
+shared tokens. For a language using romanization, author sentence readings,
+word and expression readings, meaningful word groups and displayed constituent
+readings/glosses together with that content. Read
+[workspace files](references/workspace.md) for the format.
 Do not recompute hashes merely to attach old vocabulary to changed content.
 Run `validate` and fix actual errors before audio work.
 
