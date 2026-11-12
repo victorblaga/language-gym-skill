@@ -19,12 +19,15 @@ this public skill repository supplies the reusable workflow and references.
 For developers with a separate app checkout, the equivalent is
 `npm run lesson -- ...` from that checkout.
 
-App connection is optional. For a connected workflow the human signs into the
-app, opens Settings, and creates an agent connection token. `context:read` allows
-reading their learning context; `lessons:import` allows adding prepared private
-lessons. Store it with `auth set --app URL --token-stdin`; never put it into a
-lesson file, shell argument, shared transcript or ZIP. Fetch `context` for only
-the requested language and keep that snapshot locally.
+App connection is optional. For a connected workflow run `auth login --app URL`.
+The human signs into Language Gym in their browser, checks the account,
+permissions and matching connection code, and approves. Use `--no-browser` on
+remote/headless machines and present the printed link. `auth status --app URL`
+checks the connection; `auth logout --app URL` revokes it. `context:read` allows
+reading learning context; `lessons:import` allows adding prepared private
+lessons. A manual Settings token with `auth set --app URL --token-stdin` remains
+available. Keep tokens outside lesson files, shell arguments, transcripts and
+ZIPs. Fetch `context` for only the requested language and keep it locally.
 
 The workflow can start without an account, cloud database or app connection.
 Use `init` to create a new local workspace; refuse to overwrite existing work.
@@ -79,6 +82,10 @@ choices for their language and budget; offer a short representative listening
 comparison when useful. Do not generate several paid samples automatically.
 Show the provider/account mode and explicit spending ceiling before `render`.
 Use local credentials; never ask the connected app to fund speech generation.
+An explicit `--env-file PATH` can load a local credentials file without sourcing
+shell code; keep that file outside lesson workspaces. Existing environment
+variables take precedence. App login and speech-provider authentication are
+separate: the app connection does not supply a speech API key.
 Respect the workspace ledger and stop on an unknown paid outcome instead of
 redispatching it or creating a fresh workspace to avoid the reservation.
 
