@@ -20,6 +20,13 @@ approval for the sample budget and reuse the resulting files. Have the learner
 choose when quality is subjective. Do not silently change providers or switch
 to a paid model when another tool fails.
 
+For first-use setup, check `doctor` and ask one provider decision if the user
+has not already made it. Offer suitable choices rather than requiring Google:
+Gemini for native two-speaker recording with the user's own API/Cloud access,
+another configured paid provider, or no-key online Edge speech / existing audio.
+Then help set up only the chosen route. A provider choice remains valid on
+resume; a setup check is not another audition or spending approval.
+
 ## Implemented local providers
 
 **Gemini:** `gemini-3.8-flash-tts` is the quality-focused default; Flash-Lite is a
@@ -29,13 +36,31 @@ structured speaker/style metadata per part, never spoken `Speaker1:` prefixes.
 For the existing Croatian pairing use Orus for the male voice and Kore for the
 female voice, unless the learner chooses another supported voice.
 
-Use an explicitly configured Gemini API key or explicit Vertex project with
-Application Default Credentials. The user's chat quota is not API authentication.
+Google has separate access routes. Choose explicitly:
+
+- **Vertex AI with an existing Google Cloud login:** install Google Cloud CLI
+  and run `gcloud auth login` if not already signed in. Use `render DIR
+  --provider gemini --gemini-auth gcloud --vertex-project YOUR_PROJECT
+  --budget-usd 0.90`. This obtains a short-lived token from that local login;
+  it needs no AI Studio key and uses the selected project's Cloud billing.
+- **Vertex AI with Application Default Credentials:** use `--gemini-auth adc
+  --vertex-project YOUR_PROJECT` when the user already has ADC configured.
+  A normal `gcloud auth login` and ADC are different credential setups.
+- **Gemini Developer API / AI Studio:** create a key for the intended project,
+  save it outside the workspace as `GEMINI_API_KEY`, then use `--gemini-auth
+  api-key --env-file /path/to/keys.env`. Paid API access may require positive
+  AI Studio prepaid funds even when Cloud billing and eligible promotional
+  credits are present. HTTP 402 calls for checking that billing setup.
+
+Keep the Vertex project explicit; never inherit the hosted app's project or
+credentials. The user's chat quota is not API authentication.
 Free-tier availability and remaining quota are project-specific. Google AI plans
 can include claimable developer Cloud credits; verify that the user has linked
 the relevant billing account. [Speech and languages](https://aistudio.google.com/docs/speech-generation),
 [pricing](https://aistudio.google.com/docs/pricing),
 [subscription developer benefits](https://developers.google.com/profile/help/benefits).
+[AI Studio billing](https://ai.google.dev/gemini-api/docs/billing#prepay),
+[Google Cloud login](https://docs.cloud.google.com/sdk/docs/authorizing).
 
 **Azure Speech:** use the learner's Speech resource key and region. Native
 Croatian choices include `hr-HR-GabrijelaNeural` and `hr-HR-SreckoNeural`; inspect
@@ -74,12 +99,35 @@ voices/language, it can supply the audio. Preserve the tool/model provenance
 and adopt the result with the CLI. Plain text output or consumer voice playback
 is not evidence that an exportable audio file exists.
 
-An already installed `edge-tts` may be offered explicitly as a best-effort
-external-audio option. Inspect its help and available voices. It uses Microsoft's
-consumer Read Aloud endpoint through an unofficial integration, rather than
-Azure's supported Speech API; availability and export permissions must not be
-assumed from the Edge browser feature. Do not install or choose it silently.
-Its SRT output still needs real MMS-FA alignment for this app.
+**Edge speech:** offer `edge-tts` as a no-key, no-paid-account online option.
+It uses Microsoft's consumer Read Aloud endpoint through an unofficial
+integration. Availability can change; it is not an offline model or a supported
+Azure Speech resource. After the user chooses it, use an installed `edge-tts`
+or `uvx --from edge-tts edge-tts` (requires uv/Python) and inspect `--list-voices`
+for the target language. Do not switch a user who already chose paid Google.
+
+Edge accepts one voice per request. For a dialogue, group adjacent chunks from
+the same speaker, write their exact text without speaker labels to numbered
+turn files, and generate each with its selected male/female voice. Preserve
+completed recordings on resume. For example:
+
+```sh
+edge-tts --list-voices
+edge-tts --voice SELECTED_VOICE --file turn-001.txt --write-media turn-001.mp3
+```
+
+Write `turns.txt` with ordered lines such as `file 'turn-001.mp3'`, then assemble
+the final recording once and adopt it:
+
+```sh
+ffmpeg -f concat -safe 0 -i turns.txt -ar 24000 -ac 1 -c:a pcm_s16le recording.wav
+language-gym-lesson audio DIR --file recording.wav
+language-gym-lesson align DIR --aligner http://127.0.0.1:8091
+```
+
+Check the joins and voice assignments. Align the assembled recording; Edge's
+SRT output does not replace real MMS-FA alignment. The CLI's native `--provider`
+list stays Gemini/Azure/OpenAI; Edge enters through `audio --file`.
 [Upstream tool](https://github.com/rany2/edge-tts),
 [Microsoft Read Aloud](https://support.microsoft.com/en-us/edge/use-immersive-reader-in-microsoft-edge).
 

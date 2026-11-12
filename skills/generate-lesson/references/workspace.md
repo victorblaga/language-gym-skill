@@ -40,7 +40,7 @@ and omit speaker/role fields. Cups uses `method: "cups"` and its optional
 `round`, `cup`, `patternId` teaching metadata. The CLI does not write content or
 invent timings. Never put `start`, `end` or `matchConfidence` into the draft.
 
-Run `tokens DIR` after writing the draft. It emits token indices and the exact
+Run `tokens DIR --pending --limit 5` after writing the draft. It emits token indices and the exact
 24-character sentence hash for the current text plus translation. `lexicon.json`
 maps every sentence ID to `{ "sentenceHash": "...", "lexicon": {...} }`.
 For the first example above, a complete entry has this shape:
@@ -76,6 +76,14 @@ and contextual meaning. Shared and split expressions may overlap. A word's
 optional `exprIds` must name expressions containing that word's index; indices
 alone also link an expression. Do not attach stale lexicons to changed content
 by copying a new hash without reviewing the words and expressions.
+
+Write a batch file in that same sentence-ID-to-entry map shape, then run
+`lexicon merge DIR --file BATCH.json`. The CLI checks every entry against the
+current draft before saving any of them and retains existing completed rows.
+`tokens DIR --pending --limit 5` then returns the next unfinished batch; changed
+text/translations and invalid rows are pending too. `sentenceCount`,
+`completeCount` and `remainingCount` describe the whole draft, even when only
+five sentences are returned. Keep batching until none remain, then validate.
 
 Run `validate DIR` before audio work. After `audio --file` or `render`, use
 `align` to generate `alignment-input.json`, `alignment.json` and timed
