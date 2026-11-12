@@ -67,28 +67,19 @@ information that matters. Do not make them repeat facts already supplied.
 For source material, establish whether they want faithful preservation,
 adaptation to their level, or several focused lessons.
 
-Read [workspace files](references/workspace.md) for the untimed draft and bound
-lexicon format. Write `draft.json` in the workspace and keep stable
-practice IDs. Aim for a cohesive short lesson around one practical situation,
-normally 30–35 short practice chunks, rather than padding to meet a count.
-
-- Use everyday spoken language appropriate to the target language and level.
-  Avoid literary filler, bureaucratic translations and invented personal facts.
-- For B1–C2 default to a natural two-speaker conversation. Let the learner
-  develop connected answers across several chunks before the partner reacts.
-  Vary answer length; the learner carries most substantive speech. Never change
-  speakers just because the next row starts.
-- For A0–A2 use the supported Cups method when suitable; preserve its pattern
-  metadata. Honor an explicit request for a monologue or another format.
-- A practice chunk should be easy to repeat and recall, usually a short spoken
-  sentence. Two short sentences may stay together when they make one useful
-  conversational move. Split a long explanation at natural pauses while keeping
-  its speaker and role. The existing property is named `sentences`.
-- Include idiomatic base-language translations, explicit speaker/role mappings,
-  and gender-appropriate grammar. Use recorded names accurately.
+Read [authoring rules](references/authoring.md) before creating or adapting a
+draft and when writing its contextual vocabulary. These carry the app's spoken
+register, conversation, casting and lexicon requirements. Read
+[workspace files](references/workspace.md) for the untimed draft and bound
+lexicon format. Write `draft.json` in the workspace with stable practice IDs.
+For B1–C2 default to one cohesive two-speaker everyday conversation, normally
+30–35 short sentences. For A0–A2 use Cups when suitable and retain its pattern
+metadata. Honor an explicit format or faithful-preservation request.
 
 Present the draft for content review before spending money on its recording.
-Honor review already given for an existing draft.
+Honor review already given for an existing draft: resume from its approved text
+without rewriting it or requesting the same approval again. Apply new authoring
+guidance to new or requested revisions; it does not reopen an approved draft.
 
 Complete vocabulary in small batches: `tokens DIR --pending --limit 5` returns
 exact indices/hashes and whole-draft completion counts. Author the returned
@@ -159,7 +150,9 @@ offline or no-upload request. If the destination island is ambiguous, leave it
 unassigned rather than changing an unrelated island.
 
 Wait for the server's successful import response before reporting the lesson
-as added. Report its title, app link and returned unit ID, plus provider,
+as added. When several lessons are requested, complete and confirm each import;
+report any specific blocked lesson as unfinished. Report each title, app link
+and returned unit ID, plus provider,
 known/estimated cost and checks performed. Keep the ZIP as a backup. On an
 uncertain upload outcome, check `status BUNDLE_UUID --app URL` or retry the
 same ZIP; do not rotate its ID or regenerate paid audio to retry an upload.
