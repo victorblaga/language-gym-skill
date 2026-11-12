@@ -32,7 +32,11 @@ resume; a setup check is not another audition or spending approval.
 **Gemini:** `gemini-3.8-flash-tts` is the quality-focused default; Flash-Lite is a
 lower-cost option. Croatian, Chinese and English are explicitly supported.
 Gemini supports a continuous recording with up to two prebuilt speakers. Use
-structured speaker/style metadata per part, never spoken `Speaker1:` prefixes.
+the CLI's `render` command; its shared app/CLI speech helpers construct the
+compatible request, speaker metadata and voice bindings. Do not handwrite
+provider HTTP payloads or add spoken `Speaker1:` prefixes. Keep draft text pure
+target-language speech; the CLI supplies the calm, clear, slightly slower
+conversational delivery instructions.
 For the existing Croatian pairing use Orus for the male voice and Kore for the
 female voice, unless the learner chooses another supported voice.
 
