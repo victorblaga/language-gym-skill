@@ -90,7 +90,9 @@ preserve an original rather than adapting it into a new dialogue.
 
 The CLI supports local Gemini, OpenAI Realtime and official Azure Speech, plus
 audio from other available tools. An explicit `--env-file PATH` loads your own
-API keys locally; app login and speech credentials are separate. Choose voices using actual language support and listening
+API keys locally; app login and speech credentials are separate. Two-speaker
+Gemini lessons automatically use your profile's male/female voice pairing,
+defaulting to Orus and Kore when no profile defaults exist. Choose voices using actual language support and listening
 preferences; do not assume a subscription grants API credentials or credits.
 See [speech choices](skills/generate-lesson/references/speech.md) and
 [workspace examples](skills/generate-lesson/references/workspace.md).
