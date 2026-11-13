@@ -120,6 +120,39 @@ verb aspect where relevant, noun gender/class, and helpful script readings.
 Explain the actual inflected or syntactic form and what governs it, such as
 case after a preposition, person/tense, agreement or a clitic's role.
 
+### Stable vocabulary identities
+
+Author `countingForm` for every token and whole-word group alongside its
+contextual analysis. It is the plain dictionary headword in the original
+writing system, not the displayed inflection, translation or transliteration.
+Use the same headword across lessons and inflections: Croatian `pijem` and
+`piješ` both use `piti`; Mandarin `喜欢` uses `喜欢`, not `xǐhuan`.
+Retain an intrinsic reflexive particle when it is part of the lexical headword.
+Keep gender, noun class, part-of-speech labels, aspect partners, pronunciation,
+parentheses and explanatory notes in `lemma`, `pos`, `form` or `note`, not in
+`countingForm`. Do not invent a compound headword to combine unrelated words.
+
+Author all multi-character word groups correctly. `喜欢` is one whole word;
+its constituent `喜` and `欢` still have their own readings, explanations and
+counting forms for the lookup display, but are not additional word encounters
+when the group is present. Separate single-character words remain separate.
+Expressions also need `countingForm`: their plain original-script citation form
+or construction pattern, separate from any argument or grammar annotations in
+`canonical`. Use one `…` for a variable slot: `是…吗`, `和…一起`, or `i … i …`.
+Keep fixed words and intrinsic particles; omit labels such as `(+ dat.)` or
+`(impf.)`. Their existing readings remain bound to the exact displayed
+`canonical`, not to the counting form. Expressions are counted separately from
+words; shared indices must not inflate word totals.
+Punctuation and standalone numeric tokens do not establish vocabulary items.
+
+These identities support counts of distinct words heard and repeated word
+exposures, not claims that a learner has mastered the vocabulary. A metadata-only
+repair must preserve the original text, translations, sentence IDs, readings,
+audio, alignment and existing practice history. Do not strip annotations with
+a heuristic and call the result reviewed: resolve the actual headword from
+the sentence and its contextual analysis. Flag genuine ambiguity for review.
+Never reimport a lesson as a duplicate merely to update its vocabulary metadata.
+
 Capture multi-word expressions whose parts belong together semantically or
 syntactically: idioms, fixed phrases, reflexive/phrasal verbs, light verbs,
 compound predicates and linked frames. Include split or discontinuous parts

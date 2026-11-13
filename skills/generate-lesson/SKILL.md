@@ -93,8 +93,10 @@ Complete vocabulary in small batches: `tokens DIR --pending --limit 5` returns
 exact indices/hashes and whole-draft completion counts. Author the returned
 entries in a batch JSON file, then `lexicon merge DIR --file BATCH.json` to
 validate and save them atomically. Repeat until `remainingCount` is zero.
-Every token needs its contextual gloss, lemma, part of speech and grammatical
-form. Include useful multi-word expressions, split/reflexive constructions and
+Every token needs its contextual gloss, lemma, part of speech, grammatical
+form and a clean original-script `countingForm`. Whole-word groups and expressions
+also need `countingForm`; keep pronunciation and grammatical annotations out of this
+identity. Include useful multi-word expressions, split/reflexive constructions and
 shared tokens. For a language using romanization, author sentence readings,
 word and expression readings, meaningful word groups and displayed constituent
 readings/glosses together with that content. Read
