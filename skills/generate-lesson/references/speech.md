@@ -35,8 +35,8 @@ Gemini supports a continuous recording with up to two prebuilt speakers. Use
 the CLI's `render` command; its shared app/CLI speech helpers construct the
 compatible request, speaker metadata and voice bindings. Do not handwrite
 provider HTTP payloads or add spoken `Speaker1:` prefixes. Keep draft text pure
-target-language speech; the CLI supplies the calm, clear, slightly slower
-conversational delivery instructions.
+target-language speech. Send no pacing, delivery, emotion or style directions;
+leave those choices to the model and keep the explicit speaker-to-voice bindings.
 For the existing Croatian pairing use Orus for the male voice and Kore for the
 female voice, unless the learner chooses another supported voice.
 
@@ -68,8 +68,8 @@ the relevant billing account. [Speech and languages](https://aistudio.google.com
 
 **Azure Speech:** use the learner's Speech resource key and region. Native
 Croatian choices include `hr-HR-GabrijelaNeural` and `hr-HR-SreckoNeural`; inspect
-the official voice list for other locales. Use only styles that the selected
-voice actually supports. Azure's F0 allowance is currently 500,000 Neural
+the official voice list for other locales. Use the voice's default delivery
+without style or prosody overrides. Azure's F0 allowance is currently 500,000 Neural
 characters/month, but a key does not prove that the resource uses F0 or has
 remaining allowance. If a paid price is unknown, state it and require the CLI's
 explicit estimate/budget input rather than labelling the recording free.

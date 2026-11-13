@@ -116,6 +116,9 @@ Without profile defaults, use Orus for the learner and Kore for the partner.
 Honor an explicit casting choice or supplied recording. Do not require the
 learner to name voices or approve the routine default pairing.
 
+Leave speech pacing and delivery to the provider. Keep explicit speaker/voice
+bindings, but add no slow, calm, clear, emotional or other style directions.
+
 Reuse the learner's chosen voice when suitable. If no suitable preference or
 default exists, explain the verified choices for their language and budget;
 offer a short representative listening
