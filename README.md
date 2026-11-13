@@ -76,7 +76,10 @@ management or practice-progress permissions.
 The agent discovers your saved connection with `auth status`, reads your level
 and learning context, prepares the lesson locally, then imports it privately by
 default. It returns the lesson title and app link while keeping the ZIP as a
-backup. Ask for a ZIP only or no upload to keep the work local. Multiple saved
+backup. New lessons join a relevant existing language island, or create/reuse
+one named for the lesson's topic with `import --island-title "TITLE"`. Ask for
+an unassigned lesson to omit grouping, or a ZIP only or no upload to keep the
+work local. Multiple saved
 apps require an explicit choice; a read-only connection cannot upload.
 ZIPs exclude credentials, source interviews and private provider-operation files.
 Authoring uses that context and the selected workspace, not an application

@@ -116,6 +116,9 @@ Without profile defaults, use Orus for the learner and Kore for the partner.
 Honor an explicit casting choice or supplied recording. Do not require the
 learner to name voices or approve the routine default pairing.
 
+Leave speech pacing and delivery to the provider. Keep explicit speaker/voice
+bindings, but add no slow, calm, clear, emotional or other style directions.
+
 Reuse the learner's chosen voice when suitable. If no suitable preference or
 default exists, explain the verified choices for their language and budget;
 offer a short representative listening
@@ -153,12 +156,20 @@ audio, lexicon and alignment artifacts; credentials, source interviews and local
 provider ledgers stay out of the ZIP. Do not add files recursively yourself.
 
 When connected with `lessons:import`, finish a lesson by running
-`import FILE.zip --app URL`, adding `--island ID` for the relevant existing
-island from the requested language's context. Uploading the finished private
+`import FILE.zip --app URL --island ID` for a relevant existing island from the
+requested language's context. If none fits, choose a meaningful island title
+from the lesson's topic and use `import FILE.zip --app URL --island-title "TITLE"`.
+This creates or reuses an owned island in the ZIP's validated language; titles
+match without case or surrounding whitespace. Use exactly one destination flag
+and retain it when retrying the same ZIP. Group every new lesson in a relevant
+island by default; honor an explicit request to leave it unassigned by omitting
+both flags. Do not put a lesson in an unrelated island to satisfy grouping.
+Use the installed CLI's supported flags; if `--island-title` is missing, update
+the CLI from the app's Settings download before importing into a new island.
+Uploading the finished private
 lesson is the default connected workflow; do not stop at handing over a ZIP or
 ask separately whether to upload. Honor an explicit ZIP-only, preview-only,
-offline or no-upload request. If the destination island is ambiguous, leave it
-unassigned rather than changing an unrelated island.
+offline or no-upload request.
 
 Wait for the server's successful import response before reporting the lesson
 as added. When several lessons are requested, complete and confirm each import;
