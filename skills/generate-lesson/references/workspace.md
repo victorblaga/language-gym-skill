@@ -52,15 +52,15 @@ For the first example above, a complete entry has this shape:
     "lexicon": {
       "sentenceId": "s1",
       "words": [
-        { "i": 0, "gloss": "shall we go", "lemma": "ići", "pos": "verb",
+        { "i": 0, "gloss": "shall we go", "lemma": "ići", "countingForm": "ići", "pos": "verb",
           "form": "1st person plural present" },
-        { "i": 1, "gloss": "for", "lemma": "na", "pos": "preposition",
+        { "i": 1, "gloss": "for", "lemma": "na", "countingForm": "na", "pos": "preposition",
           "form": "with accusative", "exprIds": ["coffee"] },
-        { "i": 2, "gloss": "coffee", "lemma": "kava", "pos": "noun",
+        { "i": 2, "gloss": "coffee", "lemma": "kava", "countingForm": "kava", "pos": "noun",
           "form": "accusative singular", "exprIds": ["coffee"] }
       ],
       "expressions": [
-        { "id": "coffee", "indices": [1, 2], "canonical": "na kavu",
+        { "id": "coffee", "indices": [1, 2], "canonical": "na kavu", "countingForm": "na kavu",
           "meaning": "for a coffee" }
       ]
     }
@@ -70,9 +70,15 @@ For the first example above, a complete entry has this shape:
 
 This hash matches the exact first example; use `tokens` for your own draft and
 add complete entries for every other sentence. Cover every token in order; do not omit function words. Each
-word requires a contextual gloss, lemma, part of speech and grammatical form.
-Expressions require unique local IDs, sorted token indices, a canonical form
-and contextual meaning. Shared and split expressions may overlap. A word's
+word requires a contextual gloss, lemma, clean original-script `countingForm`,
+part of speech and grammatical form. The counting form is the plain dictionary
+headword, with no grammar labels, pronunciation or explanatory annotations.
+Existing older lessons without this field remain readable; always supply it
+when authoring new vocabulary or repairing existing vocabulary metadata.
+Expressions require unique local IDs, sorted token indices, a canonical form,
+their clean `countingForm` and contextual meaning. Keep one `…` per variable
+slot in a construction's counting form, without argument-case or grammar labels.
+Shared and split expressions may overlap. A word's
 optional `exprIds` must name expressions containing that word's index; indices
 alone also link an expression. Do not attach stale lexicons to changed content
 by copying a new hash without reviewing the words and expressions.
@@ -128,30 +134,32 @@ For that Mandarin sentence, the batch entry's `lexicon` has this shape. Keep the
   "sentenceId": "s1",
   "tokenizerVersion": 2,
   "words": [
-    { "i": 0, "gloss": "I", "lemma": "我", "pos": "pronoun", "form": "subject",
+    { "i": 0, "gloss": "I", "lemma": "我", "countingForm": "我", "pos": "pronoun", "form": "subject",
       "romanization": { "scheme": "pinyin", "text": "wǒ", "sourceText": "我" } },
-    { "i": 1, "gloss": "to like", "lemma": "喜", "pos": "bound morpheme", "form": "first character of 喜欢",
+    { "i": 1, "gloss": "to like", "lemma": "喜", "countingForm": "喜", "pos": "bound morpheme", "form": "first character of 喜欢",
       "romanization": { "scheme": "pinyin", "text": "xǐ", "sourceText": "喜" } },
-    { "i": 2, "gloss": "joy", "lemma": "欢", "pos": "bound morpheme", "form": "second character of 喜欢",
+    { "i": 2, "gloss": "joy", "lemma": "欢", "countingForm": "欢", "pos": "bound morpheme", "form": "second character of 喜欢",
       "romanization": { "scheme": "pinyin", "text": "huan", "sourceText": "欢" } },
-    { "i": 3, "gloss": "to drink", "lemma": "喝", "pos": "verb", "form": "uninflected", "exprIds": ["drink-tea"],
+    { "i": 3, "gloss": "to drink", "lemma": "喝", "countingForm": "喝", "pos": "verb", "form": "uninflected", "exprIds": ["drink-tea"],
       "romanization": { "scheme": "pinyin", "text": "hē", "sourceText": "喝" } },
-    { "i": 4, "gloss": "tea", "lemma": "茶", "pos": "noun", "form": "object", "exprIds": ["drink-tea"],
+    { "i": 4, "gloss": "tea", "lemma": "茶", "countingForm": "茶", "pos": "noun", "form": "object", "exprIds": ["drink-tea"],
       "romanization": { "scheme": "pinyin", "text": "chá", "sourceText": "茶" } }
   ],
   "groups": [
-    { "indices": [1, 2], "gloss": "to like", "lemma": "喜欢", "pos": "verb", "form": "uninflected",
+    { "indices": [1, 2], "gloss": "to like", "lemma": "喜欢", "countingForm": "喜欢", "pos": "verb", "form": "uninflected",
       "romanization": { "scheme": "pinyin", "text": "xǐhuan", "sourceText": "喜欢" } }
   ],
   "expressions": [
-    { "id": "drink-tea", "indices": [3, 4], "canonical": "喝茶", "meaning": "to drink tea",
+    { "id": "drink-tea", "indices": [3, 4], "canonical": "喝茶", "countingForm": "喝茶", "meaning": "to drink tea",
       "romanization": { "scheme": "pinyin", "text": "hē chá", "sourceText": "喝茶" } }
   ]
 }
 ```
 
 `groups` defines whole words spanning two or more contiguous token indices;
-groups must be sorted and cannot overlap. Retain their underlying `words` as
+groups must be sorted and cannot overlap. Each group also carries its own clean
+`countingForm`, representing the whole word rather than its character count.
+Retain their underlying `words` as
 the displayed constituent breakdown. Uncovered tokens use their own word
 entry, so do not duplicate them as singleton groups. Group `sourceText` is the
 exact original surface spanning its indices, including any marks or separators;
