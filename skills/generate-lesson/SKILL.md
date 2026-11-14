@@ -94,13 +94,20 @@ exact indices/hashes and whole-draft completion counts. Author the returned
 entries in a batch JSON file, then `lexicon merge DIR --file BATCH.json` to
 validate and save them atomically. Repeat until `remainingCount` is zero.
 Every token needs its contextual gloss, lemma, part of speech, grammatical
-form and a clean original-script `countingForm`. Whole-word groups and expressions
-also need `countingForm`; keep pronunciation and grammatical annotations out of this
-identity. Include useful multi-word expressions, split/reflexive constructions and
-shared tokens. For a language using romanization, author sentence readings,
-word and expression readings, meaningful word groups and displayed constituent
-readings/glosses together with that content. Read
-[workspace files](references/workspace.md) for the format.
+form and a clean original-script `countingForm`; gloss pure tense/mood
+auxiliary clitics (such as Croatian `sam/si/je/smo/ste/su`, `ću/ćeš`, `bih/bi`)
+by their grammatical role (e.g. `past helper (1st sg.)`), not as bare subject
+pronouns (`I`, `they`). Whole-word groups and multi-word units also need
+`countingForm`; keep pronunciation and grammatical annotations out of this
+identity. Tag each entry in `expressions` with `"kind": "lexical"` for true
+dictionary multi-word units (intrinsic reflexives/phrasals stopping at any
+governed preposition, fixed connectors, genuine idioms — never free arguments,
+literal verb+object, copula+adjective/noun, or whole clauses) or
+`"kind": "grammar"` for periphrastic helper+verb inflections (which count as their
+separate constituent words rather than expressions). For a language using
+romanization, author sentence readings, word and expression readings, meaningful
+word groups and displayed constituent readings/glosses together with that
+content. Read [workspace files](references/workspace.md) for the format.
 Do not recompute hashes merely to attach old vocabulary to changed content.
 Run `validate` and fix actual errors before audio work.
 
