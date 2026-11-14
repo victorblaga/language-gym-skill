@@ -36,9 +36,20 @@ Use unique stable sentence IDs. Paragraph IDs must be contiguous: once a new
 paragraph starts, do not return to an earlier one. Every dialogue row names one
 of the mapped speakers and uses that person's role, including their questions.
 For a monologue use `kind`/`method` equal to `monologue`, only a primary voice,
-and omit speaker/role fields. Cups uses `method: "cups"` and its optional
-`round`, `cup`, `patternId` teaching metadata. The CLI does not write content or
-invent timings. Never put `start`, `end` or `matchConfidence` into the draft.
+and omit speaker/role fields.
+
+When `method` is `"cups"` (mandatory for `A0–A2` dialogues):
+- Every sentence requires integer `round >= 1` (`1`–`12` in schema; normally
+  `1..3` at `A0–A1` and `1..4` at `A2`) and a `cup` value from the exact
+  `cupFunctions` enum: `statement`, `variation`, `yes_no_question`, `response`,
+  `negative_contrast`, `open_question`, `bridge`, `extension` (plus optional
+  `patternId` and `newVocab`).
+- Strict `1:1` speaker alternation is enforced (`s[i].speaker !== s[i - 1].speaker`,
+  `1` sentence per turn). Consecutive same-speaker turns are allowed only when
+  `method === "conversation"` (within `1–3` at `B1` and `1–4` at `B2–C2`).
+
+The CLI does not write content or invent timings. Never put `start`, `end` or
+`matchConfidence` into the draft.
 
 Run `tokens DIR --pending --limit 5` after writing the draft. It emits token indices and the exact
 24-character sentence hash for the current text plus translation. `lexicon.json`
