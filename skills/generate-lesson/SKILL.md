@@ -77,12 +77,26 @@ for readings, word boundaries and constituent meanings.
 
 Read [authoring rules](references/authoring.md) before creating or adapting a
 draft and when writing its contextual vocabulary. These carry the app's spoken
-register, conversation, casting and lexicon requirements. Read
+register, 1-2-3 Cups, conversation, casting and lexicon requirements. Read
 [workspace files](references/workspace.md) for the untimed draft and bound
 lexicon format. Write `draft.json` in the workspace with stable practice IDs.
-For B1–C2 default to one cohesive two-speaker everyday conversation, normally
-30–35 short sentences. For A0–A2 use Cups when suitable and retain its pattern
-metadata. Honor an explicit format or faithful-preservation request.
+For `A0–A2` dialogues (and `unknown` level), `method: "cups"` (1-2-3 Cups) is
+mandatory unless an explicit format or faithful-preservation request overrides
+it. For `B1–C2` dialogues, default to `method: "conversation"` (one cohesive
+two-speaker everyday conversation). Honor an explicit format (e.g. `monologue`)
+or faithful-preservation request, and leave existing recorded lessons untouched.
+
+### Level Sizing & Method Table
+
+| Level | Method | Chunks (default) | Per-chunk cap | New vocab | Turn structure |
+| --- | --- | --- | --- | --- | --- |
+| `absolute_beginner` (`A0`) | `cups` | `16–20` (`18`, `3` rounds × `6`; Lesson 1 of a new language may use `12` / `2` rounds) | `<= 6` words / `<= 10` CJK chars | `4–6` new words | `1:1` alternation (`1` sentence/turn) |
+| `A1` | `cups` | `18–22` (`20`, `3` rounds) | `<= 8` words / `<= 13` CJK chars | `6–8` new words | `1:1` alternation (`1` sentence/turn) |
+| `A2` | `cups` | `20–24` (`24`, `4` rounds) | `<= 10` words / `<= 16` CJK chars | `8–10` new words | `1:1` alternation (`1` sentence/turn) |
+| `B1` | `conversation` | `20–25` (`22`) | `<= 11` words / `<= 18` CJK chars | `8–12` new words/collocations | `1–3` consecutive sentences/turn |
+| `B2` | `conversation` | `22–26` (`25`) | `<= 12` words / `<= 22` CJK chars | `10–14` new words/collocations | `1–4` consecutive sentences/turn |
+| `C1` | `conversation` | `28–34` (`30`) | `<= 15` words / `<= 26` CJK chars | `12–16` new words/collocations | `1–4` consecutive sentences/turn |
+| `C2` | `conversation` | `28–34` (`32`) | `<= 15` words / `<= 26` CJK chars | `12–16` new words/collocations | `1–4` consecutive sentences/turn |
 
 Present the draft for content review before spending money on its recording.
 Honor review already given for an existing draft: resume from its approved text
