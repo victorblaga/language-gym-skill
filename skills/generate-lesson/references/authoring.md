@@ -159,7 +159,7 @@ Never reimport a lesson as a duplicate merely to update its vocabulary metadata.
 Capture only true multi-word dictionary units and split periphrastic verb pairings in
 `expressions`, never whole clauses or free modifiers:
 
-- `"kind": "lexical"` (omitted defaults to `"lexical"`; counted in `uniqueExpressions`):
+- `"kind": "lexical"` (omitted defaults to `"lexical"`; counted in expression vocabulary):
   intrinsic reflexive/pronominal verbs (`dogoditi se`), verbs/adjectives with a
   fixed governed preposition **stopping at the preposition** (for `"A što se
   dogodilo sa starim tvornicama?"`, annotate `[2, 3, 4]` as `"dogoditi se s"`,
@@ -170,7 +170,7 @@ Capture only true multi-word dictionary units and split periphrastic verb pairin
   clitic (`su`) inside that single `"lexical"` entry instead of adding a
   duplicate `"grammar"` entry.
 - `"kind": "grammar"` (highlighted for learners as a single unit with a
-  `grammar` badge, but excluded from `uniqueExpressions` so its helper and verb
+  `grammar` badge, but excluded from expression vocabulary so its helper and verb
   still count as separate words): split periphrastic verb inflections where an
   auxiliary/helper clitic carries tense or mood (`prešao sam` → `canonical: "prijeći"`,
   `countingForm: "prijeći"`; `ćeš popiti` → `popiti`) or discontinuous particles
