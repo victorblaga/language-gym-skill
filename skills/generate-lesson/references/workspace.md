@@ -60,7 +60,7 @@ For the first example above, a complete entry has this shape:
           "form": "accusative singular", "exprIds": ["coffee"] }
       ],
       "expressions": [
-        { "id": "coffee", "indices": [1, 2], "canonical": "na kavu", "countingForm": "na kavu",
+        { "id": "coffee", "kind": "lexical", "indices": [1, 2], "canonical": "na kavu", "countingForm": "na kavu",
           "meaning": "for a coffee" }
       ]
     }
@@ -68,19 +68,45 @@ For the first example above, a complete entry has this shape:
 }
 ```
 
+And an example Croatian `"grammar"` entry for a periphrastic verb tense (`"Jučer sam došao."` -> helper `sam` + participle `došao`):
+
+```json
+{
+  "words": [
+    { "i": 0, "gloss": "yesterday", "lemma": "jučer", "countingForm": "jučer", "pos": "adv.", "form": "temporal adverb" },
+    { "i": 1, "gloss": "past helper (1st sg.)", "lemma": "biti", "countingForm": "biti", "pos": "aux.", "form": "present enclitic auxiliary", "exprIds": ["came"] },
+    { "i": 2, "gloss": "came", "lemma": "doći", "countingForm": "doći", "pos": "verb", "form": "masc. sg. past participle", "exprIds": ["came"] }
+  ],
+  "expressions": [
+    { "id": "came", "kind": "grammar", "indices": [1, 2], "canonical": "doći", "countingForm": "doći", "meaning": "came (1st sg. past)" }
+  ]
+}
+```
+
 This hash matches the exact first example; use `tokens` for your own draft and
-add complete entries for every other sentence. Cover every token in order; do not omit function words. Each
-word requires a contextual gloss, lemma, clean original-script `countingForm`,
+add complete entries for every other sentence. Cover every token in order; do not omit function words or tense/mood helpers. Each
+word requires a contextual gloss (gloss helper clitics by role such as `"past helper (1st sg.)"`, not as pronouns like `"I"`), lemma, clean original-script `countingForm`,
 part of speech and grammatical form. The counting form is the plain dictionary
 headword, with no grammar labels, pronunciation or explanatory annotations.
 Existing older lessons without this field remain readable; always supply it
 when authoring new vocabulary or repairing existing vocabulary metadata.
-Expressions require unique local IDs, sorted token indices, a canonical form,
-their clean `countingForm` and contextual meaning. Keep one `…` per variable
+Expressions require unique local IDs, `"kind": "lexical"` or `"kind": "grammar"`,
+sorted token indices, a canonical form, their clean `countingForm` and contextual
+meaning. Only `"kind": "lexical"` (or omitted `kind`) counts as an expression
+in practice statistics — use it solely for true dictionary multi-word units
+(intrinsic reflexives/phrasals stopping at any governed preposition, fixed
+connectors, genuine idioms) and include compound-tense auxiliaries inside that
+single lexical entry instead of adding a redundant grammar entry. Use
+`"kind": "grammar"` for periphrastic verb tenses (`sam došao` -> `"doći"`) or
+discontinuous helper particles (`…一点`); those count as their separate
+constituent words in `words[]`, never as expressions. Never merge free
+arguments/objects, whole clauses, copula + free predicate, modal/aspect verb +
+verb, literal verb + object, or ordinary preposition + noun phrases into
+`expressions`. Keep one `…` per variable
 slot in a construction's counting form, without argument-case or grammar labels.
-Shared and split expressions may overlap. A word's
-optional `exprIds` must name expressions containing that word's index; indices
-alone also link an expression. Do not attach stale lexicons to changed content
+Shared and split entries may overlap. A word's
+optional `exprIds` must name entries containing that word's index; indices
+alone also link an entry. Do not attach stale lexicons to changed content
 by copying a new hash without reviewing the words and expressions.
 
 Write a batch file in that same sentence-ID-to-entry map shape, then run
@@ -140,19 +166,34 @@ For that Mandarin sentence, the batch entry's `lexicon` has this shape. Keep the
       "romanization": { "scheme": "pinyin", "text": "xǐ", "sourceText": "喜" } },
     { "i": 2, "gloss": "joy", "lemma": "欢", "countingForm": "欢", "pos": "bound morpheme", "form": "second character of 喜欢",
       "romanization": { "scheme": "pinyin", "text": "huan", "sourceText": "欢" } },
-    { "i": 3, "gloss": "to drink", "lemma": "喝", "countingForm": "喝", "pos": "verb", "form": "uninflected", "exprIds": ["drink-tea"],
+    { "i": 3, "gloss": "to drink", "lemma": "喝", "countingForm": "喝", "pos": "verb", "form": "uninflected",
       "romanization": { "scheme": "pinyin", "text": "hē", "sourceText": "喝" } },
-    { "i": 4, "gloss": "tea", "lemma": "茶", "countingForm": "茶", "pos": "noun", "form": "object", "exprIds": ["drink-tea"],
+    { "i": 4, "gloss": "tea", "lemma": "茶", "countingForm": "茶", "pos": "noun", "form": "object",
       "romanization": { "scheme": "pinyin", "text": "chá", "sourceText": "茶" } }
   ],
   "groups": [
     { "indices": [1, 2], "gloss": "to like", "lemma": "喜欢", "countingForm": "喜欢", "pos": "verb", "form": "uninflected",
       "romanization": { "scheme": "pinyin", "text": "xǐhuan", "sourceText": "喜欢" } }
   ],
-  "expressions": [
-    { "id": "drink-tea", "indices": [3, 4], "canonical": "喝茶", "countingForm": "喝茶", "meaning": "to drink tea",
-      "romanization": { "scheme": "pinyin", "text": "hē chá", "sourceText": "喝茶" } }
-  ]
+  "expressions": []
+}
+```
+
+Literal verb-plus-object combinations such as `"喝茶"` are regular syntax, not
+expressions, and multi-character single words (`喜欢`) belong in `groups`. For a
+true Mandarin construction frame such as `"和…一起"` in `"我和朋友一起喝茶。"`,
+tag it with `"kind": "lexical"` and use a Unicode ellipsis `…` per slot in both
+`canonical`/`sourceText` (when displaying the pattern) and `countingForm`:
+
+```json
+{
+  "id": "together-with",
+  "kind": "lexical",
+  "indices": [1, 4, 5],
+  "canonical": "和…一起",
+  "countingForm": "和…一起",
+  "meaning": "together with",
+  "romanization": { "scheme": "pinyin", "text": "hé…yìqǐ", "sourceText": "和…一起" }
 }
 ```
 
@@ -169,10 +210,10 @@ Every reading's scheme must match the language setup. Author all required
 readings before validation; do not copy a new `sourceText` onto an old reading
 to bypass staleness checks.
 
-The CLI packages reading-bearing lessons as prepared format v2; older v1-only
+The CLI packages reading-bearing or counting-form/kind-bearing lessons as prepared format v2; older v1-only
 readers cannot import them. Keep using the CLI's validation and packing rather
 than changing a bundle version or manifest by hand. Existing lessons without
-readings retain the v1 contract.
+readings or counting metadata retain the v1 contract.
 
 Run `validate DIR` before audio work. After `audio --file` or `render`, use
 `align` to generate `alignment-input.json`, `alignment.json` and timed

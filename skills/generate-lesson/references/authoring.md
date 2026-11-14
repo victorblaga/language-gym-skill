@@ -118,7 +118,10 @@ give the meaning in this sentence instead of a dictionary list. Adapt analysis
 to the target language: citation forms, intrinsic reflexivity/separability,
 verb aspect where relevant, noun gender/class, and helpful script readings.
 Explain the actual inflected or syntactic form and what governs it, such as
-case after a preposition, person/tense, agreement or a clitic's role.
+case after a preposition, person/tense, agreement or a clitic's role. For
+purely grammatical tense/mood helpers (for instance Croatian `sam/si/je/smo/ste/su`,
+`ću/ćeš`, `bih/bi`), write a helper gloss such as `"past helper (1st sg.)"` or
+`"future helper (2nd sg.)"`, never a bare subject pronoun like `"I"` or `"they"`.
 
 ### Stable vocabulary identities
 
@@ -153,16 +156,40 @@ a heuristic and call the result reviewed: resolve the actual headword from
 the sentence and its contextual analysis. Flag genuine ambiguity for review.
 Never reimport a lesson as a duplicate merely to update its vocabulary metadata.
 
-Capture multi-word expressions whose parts belong together semantically or
-syntactically: idioms, fixed phrases, reflexive/phrasal verbs, light verbs,
-compound predicates and linked frames. Include split or discontinuous parts
-using sorted, possibly nonadjacent indices. Shared clitics, auxiliaries or
-prepositions and nested constructions can belong to several expressions;
-include the shared index in every expression it actually participates in.
-Each expression needs a canonical citation form and its contextual meaning.
-Link each participating word through `exprIds`, retaining its own token gloss
-and morphology. Add a literal explanation only for a nontransparent expression,
-and a note only when it explains useful grammar, register or scope.
+Capture only true multi-word dictionary units and split periphrastic verb pairings in
+`expressions`, never whole clauses or free modifiers:
+
+- `"kind": "lexical"` (omitted defaults to `"lexical"`; counted in `uniqueExpressions`):
+  intrinsic reflexive/pronominal verbs (`dogoditi se`), verbs/adjectives with a
+  fixed governed preposition **stopping at the preposition** (for `"A što se
+  dogodilo sa starim tvornicama?"`, annotate `[2, 3, 4]` as `"dogoditi se s"`,
+  never `"što se dogodilo s tvornicama"`), separable/phrasal/light-verb units,
+  fixed connectors/correlatives (`na miru`, `和…一起`, `是…吗`), lexicalized
+  compounds (`你好`), and true non-literal idioms/sayings. When a `"lexical"`
+  unit appears in a compound tense (`Proizvodili su se`), include the auxiliary
+  clitic (`su`) inside that single `"lexical"` entry instead of adding a
+  duplicate `"grammar"` entry.
+- `"kind": "grammar"` (highlighted for learners as a single unit with a
+  `grammar` badge, but excluded from `uniqueExpressions` so its helper and verb
+  still count as separate words): split periphrastic verb inflections where an
+  auxiliary/helper clitic carries tense or mood (`prešao sam` → `canonical: "prijeći"`,
+  `countingForm: "prijeći"`; `ćeš popiti` → `popiti`) or discontinuous particles
+  like `慢一点` (`countingForm: "…一点"`).
+- **Explicit exclusions**: never create an expression for free subjects,
+  objects, or modifiers; modal/aspect verb + infinitive (`može prepoznati`,
+  `počele propadati`); copula `biti` + free adjective/noun (`biti živ`,
+  `bila stroga`); ordinary preposition + noun (`sa starim tvornicama`,
+  `u svakodnevnom životu`); literal verb + object (`喝茶`, `踢足球`); literal
+  negation + verb (`不喜欢`); or multi-character CJK single words (`喜欢`, `足球`
+  belong in `groups`, not `expressions`).
+
+Include split or discontinuous parts using sorted, possibly nonadjacent indices.
+Shared clitics, auxiliaries or prepositions and nested constructions can belong
+to several entries; include the shared index in every entry it actually
+participates in. Link each participating word through `exprIds`, retaining its
+own token gloss and morphology. Add a literal explanation only for a
+nontransparent expression, and a note only when it explains useful grammar,
+register or scope.
 
 Use [workspace files](workspace.md) for the saved schema and resumable merge
 commands. Complete vocabulary is required even for an existing recording or a
