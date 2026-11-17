@@ -13,9 +13,12 @@ write the lesson unless the user specifically asks for that tool.
 ## Get ready
 
 Locate `language-gym-lesson`, or the downloaded `language-gym-lesson.mjs` and run
-it with Node 24+. Start with `--help` and `doctor`; use the installed command's
-help for exact flags. The connected app's Settings downloads the standalone CLI;
-this public skill repository supplies the reusable workflow and references.
+it with Node 24+. If the CLI is not installed yet, follow the repository root's
+`AGENTS.md` (which downloads it from
+`https://languagegym.app/downloads/language-gym-lesson.zip`). Start with
+`--help` and `doctor`; use the installed command's help for exact flags. This
+public skill repository supplies the reusable workflow and references while
+`language-gym-lesson` provides the standalone runtime.
 Use the CLI, selected lesson workspace, supplied source material and connected
 app context for authoring. Do not inspect an application checkout, old database,
 emulator state or backups for profile or vocabulary. Contextual vocabulary is
@@ -25,15 +28,15 @@ Start with `auth status` to discover the saved app and check the account, expiry
 and scopes without reading its token file. A single saved app is selected
 automatically. If several are saved, ask which app to use and pass `--app URL`;
 never guess a destination. An explicitly requested app always takes precedence.
-For an unconnected workflow run `auth login --app URL` when the user supplies
-the app address.
+For an unconnected workflow run `auth login --app https://languagegym.app` (or a
+user-supplied `--app URL`).
 The human signs into Language Gym in their browser, checks the account,
 permissions and matching connection code, and approves. Use `--no-browser` on
 remote/headless machines and present the printed link. `auth status --app URL`
 checks the connection; `auth logout --app URL` revokes it. `context:read` allows
 reading learning context; `lessons:import` allows adding prepared private
-lessons. A manual Settings token with `auth set --app URL --token-stdin` remains
-available. Keep tokens outside lesson files, shell arguments, transcripts and
+lessons. Pre-created tokens via `auth set --app URL --token-stdin` remain
+supported. Keep tokens outside lesson files, shell arguments, transcripts and
 ZIPs. Fetch `context --app URL --language CODE --output FILE` for only the
 requested language and use its level, facts and islands. Name the destination
 account briefly when starting a connected lesson. Do not require the learner to
@@ -188,7 +191,8 @@ and retain it when retrying the same ZIP. Group every new lesson in a relevant
 island by default; honor an explicit request to leave it unassigned by omitting
 both flags. Do not put a lesson in an unrelated island to satisfy grouping.
 Use the installed CLI's supported flags; if `--island-title` is missing, update
-the CLI from the app's Settings download before importing into a new island.
+the CLI from `https://languagegym.app/downloads/language-gym-lesson.zip` (or the
+configured `--app` host) before importing into a new island.
 Uploading the finished private
 lesson is the default connected workflow; do not stop at handing over a ZIP or
 ask separately whether to upload. Honor an explicit ZIP-only, preview-only,

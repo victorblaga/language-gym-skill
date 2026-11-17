@@ -1,33 +1,47 @@
 # Language Gym generation skill
 
 Create language lessons with your own local agent and import complete private
-lessons into a Language Gym app. This repository contains the reusable skill,
-using the open `SKILL.md` format for Codex, Claude Code, Antigravity and other
-compatible harnesses with local shell access.
+lessons into Language Gym. This repository contains the reusable skill using
+the open `SKILL.md` format for Claude Code, Codex, Cursor, Antigravity, and
+other compatible agents with shell access.
 
 The agent interviews you or adapts source material and writes the lesson and
 contextual vocabulary. The standalone Language Gym CLI handles speech,
-alignment, validation, ZIP packaging and optional app access. Text uses your
+alignment, validation, ZIP packaging, and optional app access. Text uses your
 agent's own model access; speech uses your local credentials or an existing
 recording. The hosted app does not pay for generation.
 
-## Install
+## Quick setup
+
+Paste this prompt into Claude Code, Codex, Cursor, Antigravity, or any
+shell-capable coding agent:
+
+```text
+Read https://github.com/victorblaga/language-gym-skill and follow AGENTS.md to install the Language Gym skill and CLI, then connect my https://languagegym.app account.
+```
+
+The agent follows [AGENTS.md](AGENTS.md) to install the skill, download the
+standalone CLI from `https://languagegym.app`, verify `ffmpeg`/Docker via
+`doctor`, and open a browser approval link so you can connect in one click.
+
+## Manual install
 
 Copy or symlink the entire `skills/generate-lesson` folder, including references:
 
 | Harness | Location | Invocation |
 | --- | --- | --- |
-| Codex | `~/.agents/skills/generate-lesson/` | `$generate-lesson` |
 | Claude Code | `~/.claude/skills/generate-lesson/` | `/generate-lesson` |
+| Codex | `~/.agents/skills/generate-lesson/` | `$generate-lesson` |
+| Cursor | `~/.cursor/skills/generate-lesson/` | Skill / rules |
 | Antigravity | Project `.agents/skills/generate-lesson/` or global `~/.gemini/config/skills/generate-lesson/` | `/generate-lesson` |
 | Other compatible agents | Their documented skills directory | Their skill selector |
 
-For example, install for Codex without replacing an existing skill:
+For example, install without replacing an existing skill:
 
 ```sh
-git clone https://github.com/victorblaga/language-gym-skill.git
+git clone https://github.com/victorblaga/language-gym-skill.git ~/.local/share/language-gym-skill
 mkdir -p ~/.agents/skills
-ln -s "$PWD/language-gym-skill/skills/generate-lesson" ~/.agents/skills/generate-lesson
+ln -sfn "$HOME/.local/share/language-gym-skill/skills/generate-lesson" ~/.agents/skills/generate-lesson
 ```
 
 Optional `agents/openai.yaml` supplies Codex UI metadata; the workflow has no
@@ -38,53 +52,62 @@ Codex-only runtime. Current discovery documentation:
 
 ## CLI and alignment
 
-Get the compatible standalone CLI from your Language Gym app's Settings, or:
+Download the compatible standalone CLI directly:
 
 ```text
-https://YOUR_LANGUAGE_GYM_APP/downloads/language-gym-lesson.zip
+https://languagegym.app/downloads/language-gym-lesson.zip
 ```
 
-Extract it and run `node /path/to/language-gym-lesson.mjs help`, then `doctor`.
-It requires Node 24+ and host ffmpeg/ffprobe. `doctor` checks Docker, Compose,
-daemon access and compatible aligner readiness. The download includes the local
-MMS-FA aligner source and portable Docker setup in `aligner/README.md`, including
-the first model download and persistent cache. A copied workspace can
-adopt existing audio, align, validate and pack without an app account or paid
-model call once the local tools/model are installed.
+(Pass `--app URL` to point at a custom Language Gym deployment instead of
+`https://languagegym.app`.)
 
-This public repository contains instructions and format examples. The app
-distributes the compatible CLI implementation; it does not need to expose its
+Extract it and run `node /path/to/language-gym-lesson.mjs help`, then `doctor`.
+It requires Node 24+ and host `ffmpeg`/`ffprobe`. `doctor` checks Docker,
+Compose, daemon access, and compatible aligner readiness. The download includes
+the local MMS-FA aligner source and portable Docker setup in
+`aligner/README.md`, including the first model download and persistent cache. A
+copied workspace can adopt existing audio, align, validate, and pack without an
+app account or paid model call once the local tools/model are installed.
+
+This public repository contains instructions and format examples. Language Gym
+distributes the compatible CLI bundle directly; it does not need to expose its
 private server implementation or learner data.
 
 ## Optional app connection
 
-Run `auth login --app https://YOUR_LANGUAGE_GYM_APP`. Sign into the app in your
-browser, check the account and matching connection code, then approve. On a
-remote machine use `--no-browser` and open the printed link yourself. Choose:
+Run:
 
-- `context:read` for selected-language level, recorded facts, islands and lesson
-  summaries.
+```sh
+language-gym-lesson auth login --app https://languagegym.app
+```
+
+Sign into Language Gym in your browser, check the account and matching
+connection code, then approve. On a remote or headless machine use
+`--no-browser` and open the printed link yourself. Requested scopes:
+
+- `context:read` for selected-language level, recorded facts, islands, and
+  lesson summaries.
 - `lessons:import` for adding complete private lessons.
 
 The CLI saves the token in protected config outside lesson workspaces, bound to
 the exact app origin. Use `auth status` to check it and `auth logout` to revoke
-it. Manually created Settings tokens can still be supplied through CLI stdin,
-never a command argument. Tokens
-expire and can be revoked; they grant no Studio, public publication, account
-management or practice-progress permissions.
+it (you can also revoke connections in Settings). Pre-created API tokens can
+still be supplied through `auth set --app URL --token-stdin`, never as a command
+argument. Tokens expire and can be revoked; they grant no Studio, public
+publication, account management, or practice-progress permissions.
 
 The agent discovers your saved connection with `auth status`, reads your level
 and learning context, prepares the lesson locally, then imports it privately by
 default. It returns the lesson title and app link while keeping the ZIP as a
 backup. New lessons join a relevant existing language island, or create/reuse
 one named for the lesson's topic with `import --island-title "TITLE"`. Ask for
-an unassigned lesson to omit grouping, or a ZIP only or no upload to keep the
-work local. Multiple saved
-apps require an explicit choice; a read-only connection cannot upload.
-ZIPs exclude credentials, source interviews and private provider-operation files.
-Authoring uses that context and the selected workspace, not an application
-checkout or an old local database. Vocabulary is saved in validated, resumable
-sentence batches; an approved draft continues through recording and delivery.
+an unassigned lesson to omit grouping, or a ZIP only / no upload to keep the
+work local. Multiple saved apps require an explicit choice; a read-only
+connection cannot upload. ZIPs exclude credentials, source interviews, and
+private provider-operation files. Authoring uses that context and the selected
+workspace, not an application checkout or an old local database. Vocabulary is
+saved in validated, resumable sentence batches; an approved draft continues
+through recording and delivery.
 
 ## Try it
 
@@ -96,12 +119,13 @@ explicit budget, then add the finished lesson to my connected Language Gym accou
 Existing text and recordings are supported too. Honor explicit requests to
 preserve an original rather than adapting it into a new dialogue.
 
-The CLI supports local Gemini, OpenAI Realtime and official Azure Speech, plus
+The CLI supports local Gemini, OpenAI Realtime, and official Azure Speech, plus
 audio from other available tools. An explicit `--env-file PATH` loads your own
 API keys locally; app login and speech credentials are separate. Two-speaker
 Gemini lessons automatically use your profile's male/female voice pairing,
-defaulting to Orus and Kore when no profile defaults exist. Choose voices using actual language support and listening
-preferences; do not assume a subscription grants API credentials or credits.
+defaulting to Orus and Kore when no profile defaults exist. Choose voices using
+actual language support and listening preferences; do not assume a subscription
+grants API credentials or credits.
 See [speech choices](skills/generate-lesson/references/speech.md) and
 [workspace examples](skills/generate-lesson/references/workspace.md).
 
