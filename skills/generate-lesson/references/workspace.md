@@ -186,7 +186,8 @@ For that Mandarin sentence, the batch entry's `lexicon` has this shape. Keep the
     { "indices": [1, 2], "gloss": "to like", "lemma": "喜欢", "countingForm": "喜欢", "pos": "verb", "form": "uninflected",
       "romanization": { "scheme": "pinyin", "text": "xǐhuan", "sourceText": "喜欢" } }
   ],
-  "expressions": []
+  "expressions": [],
+  "hints": [{ "indices": [1, 2] }, { "indices": [3] }]
 }
 ```
 
@@ -221,10 +222,16 @@ Every reading's scheme must match the language setup. Author all required
 readings before validation; do not copy a new `sourceText` onto an old reading
 to bypass staleness checks.
 
-The CLI packages reading-bearing or counting-form/kind-bearing lessons as prepared format v2; older v1-only
+The CLI packages reading-bearing, counting-form/kind-bearing, or hint-bearing lessons as prepared format v2; older v1-only
 readers cannot import them. Keep using the CLI's validation and packing rather
 than changing a bundle version or manifest by hand. Existing lessons without
-readings or counting metadata retain the v1 contract.
+readings, hints, or counting metadata retain the v1 contract.
+
+When supplying optional `"hints": [{ "indices": [...] }, ...]` on a `lexicon` entry, include at
+most two non-empty, sorted, disjoint token-index objects that leave at least one
+token unrevealed (`union(hints).size < words.length`, `[]` for single-word
+utterances) and never split a multi-character `groups` word across a partial hint
+on multi-word sentences.
 
 Run `validate DIR` before audio work. After `audio --file` or `render`, use
 `align` to generate `alignment-input.json`, `alignment.json` and timed
