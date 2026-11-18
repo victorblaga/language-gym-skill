@@ -38,15 +38,16 @@ of the mapped speakers and uses that person's role, including their questions.
 For a monologue use `kind`/`method` equal to `monologue`, only a primary voice,
 and omit speaker/role fields.
 
-When `method` is `"cups"` (mandatory for `A0–A2` dialogues):
+When `method` is `"cups"` (mandatory for `A0`, `unknown`, and `A1` dialogues):
 - Every sentence requires integer `round >= 1` (`1`–`12` in schema; normally
-  `1..3` at `A0–A1` and `1..4` at `A2`) and a `cup` value from the exact
-  `cupFunctions` enum: `statement`, `variation`, `yes_no_question`, `response`,
-  `negative_contrast`, `open_question`, `bridge`, `extension` (plus optional
-  `patternId` and `newVocab`).
+  `1..2` in `Short` and `1..3` in `Standard` at `A0–A1`) and a `cup` value from
+  the exact `cupFunctions` enum: `statement`, `variation`, `yes_no_question`,
+  `response`, `negative_contrast`, `open_question`, `bridge`, `extension` (plus
+  optional `patternId` and `newVocab`).
 - Strict `1:1` speaker alternation is enforced (`s[i].speaker !== s[i - 1].speaker`,
   `1` sentence per turn). Consecutive same-speaker turns are allowed only when
-  `method === "conversation"` (within `1–3` at `B1` and `1–4` at `B2–C2`).
+  `method === "conversation"` (within `1–2` short sentences/turn at `A2`,
+  `1–3` at `B1`, and `1–4` at `B2–C2`).
 
 The CLI does not write content or invent timings. Never put `start`, `end` or
 `matchConfidence` into the draft.
