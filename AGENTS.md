@@ -1,13 +1,27 @@
 # Language Gym Skill Setup
 
 Follow these steps in order when asked to install the Language Gym skill, set up
-the `language-gym-lesson` CLI, or connect a user's Language Gym account.
+the `language-gym-lesson` CLI, or connect a user's Language Gym account. Live
+agent discovery entrypoints on Language Gym: `https://languagegym.app/llms.txt`
+and `https://languagegym.app/.well-known/agent-skills/index.json`.
 
 **Idempotency first:** Inspect existing skill symlinks, `language-gym-lesson` on
 `PATH`, local aligner health, and `auth status` before overwriting anything. Skip
 steps that are already working unless the user asks to reinstall or update.
 
-## 1. Clone and install the `generate-lesson` skill
+## 1. Install the `generate-lesson` skill
+
+Check whether a working `generate-lesson` skill is already installed for the
+active harness. Otherwise install via `npx` if available, or fall back to the
+zero-dependency `git clone` and symlink steps below.
+
+**With `npx`:**
+
+```sh
+npx skills add victorblaga/language-gym-skill@generate-lesson
+```
+
+**Without `npx` (or from an existing checkout):**
 
 Check whether the current directory is already a checkout of `language-gym-skill`
 (`skills/generate-lesson/SKILL.md` exists). Otherwise, clone into

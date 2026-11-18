@@ -307,18 +307,19 @@ own token gloss and morphology. Add a literal explanation only for a
 nontransparent expression, and a note only when it explains useful grammar,
 register or scope.
 
-Add progressive recall hints (`hints?: { indices: number[] }[]`) with `1–2` disjoint sorted
-token-index objects for every sentence with `>= 2` tokens (`[]` for 1-token
-utterances):
+Add progressive recall hints (`"hints": [{ "indices": [...] }, ...]`) with `1–2`
+disjoint, strictly ascending 0-based token-index objects for every sentence with
+`>= 2` tokens (`[]` for `<= 1` token; schema allows `0..2` entries):
 
 - `hints[0]` reveals the strongest retrieval cue first (an idiom, lexical unit,
   phrasal/reflexive frame, or central predicate).
 - `hints[1]` (for sentences with `>= 4` tokens) reveals a separate secondary verb
   frame or content anchor disjoint from `hints[0]`.
-- Keep multi-character `groups` intact inside a hint unless a single group
-  covers the whole sentence, leave at least one token unrevealed, and avoid
-  proper names already visible in the base-language translation when other
-  content words exist.
+- Each entry uses strictly `{ "indices": [...] }` (`0 <= i < tokens.length`),
+  leaves at least one token unrevealed, keeps multi-character `groups` intact
+  unless a single group covers the entire sentence, and avoids proper names
+  already visible in the base-language translation when other content words
+  exist.
 
 Use [workspace files](workspace.md) for the saved schema and resumable merge
 commands. Complete vocabulary is required even for an existing recording or a

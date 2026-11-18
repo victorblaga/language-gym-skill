@@ -74,7 +74,8 @@ For the first example above, a complete entry has this shape:
       "expressions": [
         { "id": "coffee", "kind": "lexical", "indices": [1, 2], "canonical": "na kavu", "countingForm": "na kavu",
           "meaning": "for a coffee" }
-      ]
+      ],
+      "hints": [{ "indices": [1, 2] }]
     }
   }
 }
@@ -91,7 +92,8 @@ And an example Croatian `"grammar"` entry for a periphrastic verb tense (`"Juče
   ],
   "expressions": [
     { "id": "came", "kind": "grammar", "indices": [1, 2], "canonical": "doći", "countingForm": "doći", "meaning": "came (1st sg. past)" }
-  ]
+  ],
+  "hints": [{ "indices": [1, 2] }]
 }
 ```
 
@@ -228,11 +230,16 @@ readers cannot import them. Keep using the CLI's validation and packing rather
 than changing a bundle version or manifest by hand. Existing lessons without
 readings, hints, or counting metadata retain the v1 contract.
 
-When supplying optional `"hints": [{ "indices": [...] }, ...]` on a `lexicon` entry, include at
-most two non-empty, sorted, disjoint token-index objects that leave at least one
-token unrevealed (`union(hints).size < words.length`, `[]` for single-word
-utterances) and never split a multi-character `groups` word across a partial hint
-on multi-word sentences.
+Author `"hints": [{ "indices": [...] }, ...]` on every `lexicon` entry (`0..2`
+entries in schema; supply `1–2` when `tokens.length >= 2` and `[]` when
+`tokens.length <= 1`). Validation enforces:
+
+- Each entry is strictly `{ "indices": [...] }` with non-empty, strictly
+  ascending 0-based token indices (`0 <= i < words.length`).
+- Entries are disjoint across `hints[0]` and `hints[1]` and leave at least one
+  token unrevealed (`union(hints).size < words.length`).
+- A hint never splits a multi-character `groups` entry unless a single group
+  covers the entire sentence.
 
 Run `validate DIR` before audio work. After `audio --file` or `render`, use
 `align` to generate `alignment-input.json`, `alignment.json` and timed

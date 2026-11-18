@@ -24,9 +24,17 @@ The agent follows [AGENTS.md](AGENTS.md) to install the skill, download the
 standalone CLI from `https://languagegym.app`, verify `ffmpeg`/Docker via
 `doctor`, and open a browser approval link so you can connect in one click.
 
+Or install the skill directly with `npx` (then follow [AGENTS.md](AGENTS.md)
+Steps 2–4 for the CLI and optional account connection):
+
+```sh
+npx skills add victorblaga/language-gym-skill@generate-lesson
+```
+
 ## Manual install
 
-Copy or symlink the entire `skills/generate-lesson` folder, including references:
+Without `npx`, copy or symlink the entire `skills/generate-lesson` folder,
+including references:
 
 | Harness | Location | Invocation |
 | --- | --- | --- |
@@ -45,7 +53,10 @@ ln -sfn "$HOME/.local/share/language-gym-skill/skills/generate-lesson" ~/.agents
 ```
 
 Optional `agents/openai.yaml` supplies Codex UI metadata; the workflow has no
-Codex-only runtime. Current discovery documentation:
+Codex-only runtime. Live discovery entrypoints:
+`https://languagegym.app/llms.txt` and
+`https://languagegym.app/.well-known/agent-skills/index.json`.
+Current harness skill documentation:
 [Codex](https://learn.chatgpt.com/docs/build-skills),
 [Claude Code](https://code.claude.com/docs/en/skills),
 [Antigravity](https://antigravity.google/docs/skills).
@@ -85,8 +96,8 @@ Sign into Language Gym in your browser, check the account and matching
 connection code, then approve. On a remote or headless machine use
 `--no-browser` and open the printed link yourself. Requested scopes:
 
-- `context:read` for selected-language level, recorded facts, islands, and
-  lesson summaries.
+- `context:read` for selected-language level, recorded facts, islands, lesson
+  summaries, and per-lesson practice and review status.
 - `lessons:import` for adding complete private lessons.
 
 The CLI saves the token in protected config outside lesson workspaces, bound to
@@ -94,7 +105,7 @@ the exact app origin. Use `auth status` to check it and `auth logout` to revoke
 it (you can also revoke connections in Settings). Pre-created API tokens can
 still be supplied through `auth set --app URL --token-stdin`, never as a command
 argument. Tokens expire and can be revoked; they grant no Studio, public
-publication, account management, or practice-progress permissions.
+publication, account management, or practice-recording permissions.
 
 The agent discovers your saved connection with `auth status`, reads your level
 and learning context, prepares the lesson locally, then imports it privately by

@@ -38,9 +38,10 @@ reading learning context; `lessons:import` allows adding prepared private
 lessons. Pre-created tokens via `auth set --app URL --token-stdin` remain
 supported. Keep tokens outside lesson files, shell arguments, transcripts and
 ZIPs. Fetch `context --app URL --language CODE --output FILE` for only the
-requested language and use its level, facts and islands. Name the destination
-account briefly when starting a connected lesson. Do not require the learner to
-repeat their app address or profile when the saved connection provides them.
+requested language and use its level, facts, islands, and lesson practice/review
+status. Name the destination account briefly when starting a connected lesson.
+Do not require the learner to repeat their app address or profile when the saved
+connection provides them.
 
 The workflow can start without an account, cloud database or app connection.
 Use `init` for new work; resume an existing workspace rather than replacing it.
@@ -64,9 +65,15 @@ or an unreachable daemon needs setup, not a paid recording attempt.
 
 ## Gather and write
 
-Read the learner's known level, interests, recorded facts and relevant lesson
-summaries when available. Ask one concrete question at a time about missing
-information that matters. Do not make them repeat facts already supplied.
+Read the learner's known level, interests, recorded facts and `context`'s
+`lessons[]` summaries and mastery/scheduling fields (`listenCount`,
+`practiceCount`, `confidentlyClosed`, `recallDueAt`, `remedialListen`,
+`lowRetentionListen`) when available. Use them when deciding whether to
+introduce a brand-new topic (when existing lessons are progressing smoothly or
+`confidentlyClosed`) or reinforce weak, overdue (`recallDueAt`), or
+warmup-flagged (`remedialListen`, `lowRetentionListen`) lessons by recycling
+their vocabulary. Ask one concrete question at a time about missing information
+that matters. Do not make them repeat facts already supplied.
 For source material, establish whether they want faithful preservation (`keep`),
 adaptation to their level, or several focused lessons.
 
@@ -135,12 +142,18 @@ dictionary multi-word units (intrinsic reflexives/phrasals stopping at any
 governed preposition, fixed connectors, genuine idioms — never free arguments,
 literal verb+object, copula+adjective/noun, or whole clauses) or
 `"kind": "grammar"` for periphrastic helper+verb inflections (which count as their
-separate constituent words rather than expressions). For a language using
+separate constituent words rather than expressions). Alongside `words`,
+`groups`, and `expressions`, author 2-step progressive recall `hints`
+(`"hints": [{ "indices": [...] }, { "indices": [...] }]`) in every `lexicon
+merge` batch: supply `1–2` disjoint sorted 0-based token-index objects when
+`tokens.length >= 2` (`[]` for 1-token sentences), leaving at least one token
+unrevealed and keeping multi-character `groups` intact; see
+[authoring rules](references/authoring.md) and
+[workspace files](references/workspace.md). For a language using
 romanization, author sentence readings, word and expression readings, meaningful
 word groups and displayed constituent readings/glosses together with that
-content. Read [workspace files](references/workspace.md) for the format.
-Do not recompute hashes merely to attach old vocabulary to changed content.
-Run `validate` and fix actual errors before audio work.
+content. Do not recompute hashes merely to attach old vocabulary to changed
+content. Run `validate` and fix actual errors before audio work.
 
 ## Choose speech and prepare
 
