@@ -4,8 +4,14 @@ Use these rules for new drafts, requested adaptations and contextual vocabulary
 going forward; leave recorded existing content (such as existing Croatian
 lessons) untouched unless a revision is requested. An approved draft stays
 approved; continue its unfinished preparation and delivery without silently
-rewriting it. Preserve supplied wording when faithful preservation was
-requested.
+rewriting it. When faithful preservation (`keep`) is requested on a supplied
+source transcript, preserve the supplied wording and auto-detect whether the
+source is a 1-speaker monologue (`kind: "monologue"`, `method: "monologue"`,
+primary voice only, no `speaker`/`turnRole`) or a 2-speaker dialogue
+(`kind: "dialogue"`, `method: "conversation"` when at least two lines carry
+speaker labels like `Name: ...` from two distinct speakers, ignoring timestamps
+or URLs; strip speaker prefixes from `text` and assign explicit `speaker` and
+`turnRole` per sentence).
 
 ## Everyday register
 
@@ -70,23 +76,25 @@ workflow. Validation checks source identity and completeness; it cannot prove
 pronunciation accuracy. Readings alone do not establish speech-provider or
 MMS-FA support for a language or variety.
 
-## 1-2-3 Cups (`A0–A2`)
+## 1-2-3 Cups (`A0–A1`)
 
-For `A0` (`absolute_beginner`), `A1`, and `A2` dialogues (and `unknown` level),
-`method: "cups"` is mandatory unless an explicit format or faithful-preservation
-request applies. Size each lesson to the target level:
+For `A0` (`absolute_beginner`, `unknown`) and `A1` dialogues, `method: "cups"`
+(high-repetition pattern dialogue) is mandatory unless an explicit format or
+faithful-preservation (`keep`) request applies. Use `Short` as the default
+length for `A0–A1` and `Standard` when a fuller lesson is requested:
 
-- `A0`: `16–20` chunks (default `18`, `3` rounds × `6`; Lesson 1 of a brand-new
-  language may use `12` chunks / `2` rounds), `<= 6` words / `<= 10` CJK chars
-  per chunk, `4–6` new words.
-- `A1`: `18–22` chunks (default `20`, `3` rounds), `<= 8` words / `<= 13` CJK
-  chars per chunk, `6–8` new words.
-- `A2`: `20–24` chunks (default `24`, `4` rounds), `<= 10` words / `<= 16` CJK
-  chars per chunk, `8–10` new words.
+- `A0` (`absolute_beginner`, `unknown`):
+  - `Short` (default): `10–12` chunks (`12`, `2` rounds × `6`), `3–5` new words.
+  - `Standard`: `16–20` chunks (`18`, `3` rounds × `6`), `4–6` new words.
+  - Per-chunk cap: `<= 6` words / `<= 10` CJK chars per chunk.
+- `A1`:
+  - `Short` (default): `10–12` chunks (`12`, `2` rounds × `6`), `4–6` new words.
+  - `Standard`: `18–22` chunks (`20`, `3` rounds), `6–8` new words.
+  - Per-chunk cap: `<= 8` words / `<= 13` CJK chars per chunk.
 
-Build each round as a connected 6-Cup chain (`round` is an integer `>= 1`: `3`
-rounds at `A0–A1`, `2` rounds for a 12-chunk `A0` Lesson 1, `4` rounds at `A2`),
-tagging each sentence's `cup` (and optional `patternId`):
+Build each round as a connected 6-Cup chain (`round` is an integer `>= 1`: `2`
+rounds in `Short` `A0–A1`, `3` rounds in `Standard` `A0–A1`), tagging each
+sentence's `cup` (and optional `patternId`):
 
 1. `statement` (Cup 1 · Statement): partner models a concrete everyday line or
    core pattern.
@@ -94,57 +102,91 @@ tagging each sentence's `cup` (and optional `patternId`):
    location, time, object, or polarity swap).
 3. `yes_no_question` (Cup 2 · Yes/No Q): partner asks a natural yes/no question
    testing the frame.
-4. `response` (Cup 2 · Response): learner answers directly and carries the
-   frame forward.
+4. `response` (Cup 2 · Response): learner answers directly in a complete
+   sentence and carries the frame forward.
 5. `open_question` (Cup 3 · Open Q): partner asks an open question
    (`who`/`what`/`where`/`when`/`which`/`how`).
-6. `bridge` (Cup 3 · Bridge): learner answers and naturally bridges into the next
-   detail or round.
+6. `bridge` (Cup 3 · Bridge): learner answers in a complete sentence and
+   naturally bridges into the next detail or round.
 
 Use optional `negative_contrast` (negation/contrast of the active frame) or
 `extension` (a short natural follow-up) when a round includes an extra beat
-(such as a `20`-chunk `A1` lesson).
+(such as a `20`-chunk `Standard` `A1` lesson).
 
 Follow these non-negotiable Cups rules:
 
+- **Beginner Repetition Rule (`4–6×` repetition + complete reusable
+  sentences)**: At `A0–A1`, prioritize heavy repetition (`4–6×` per core word and
+  pattern frame across genuine structural transformations: person swap, yes/no
+  question, negation/contrast, open question, bridge) and **complete reusable
+  sentences on every turn** — never write bare one-word or elliptical replies
+  like *"Yes"*, *"No"*, or *"Me too"* — even if the Q&A exchange is slightly
+  more structured and deliberate than casual native small talk. Keep everyday
+  vocabulary and authentic grammar (including natural pro-drop omission of
+  subject pronouns except when marking contrast). Never write back-to-back
+  verbatim monologue loops (`s[i].text !== s[i - 1].text`).
 - **Strict `1:1` speaker alternation**: adjacent sentences must alternate
   speakers (`s[i].speaker !== s[i - 1].speaker`) and roles, with `1` sentence
   per turn.
 - **Named local peer partner**: cast a realistic named peer suited to the
   setting (friend, neighbor, barista, coworker) — never `"Teacher"` or `"Tutor"`.
-- **`4–6×` structural frame transformations**: recycle every new core word and
-  pattern `4–6×` across genuine transformations (person swap, yes/no question,
-  negation/contrast, open question, bridge) while staying idiomatic. Never write
-  back-to-back verbatim monologue loops (`s[i].text !== s[i - 1].text`).
 - **Strict per-sentence caps**: every sentence must obey the level's word and
   CJK character limit.
 - **Spiral review every 5th lesson**: Lessons 5, 10, 15, 20, ... are spiral
   review 1-2-3 Cups lessons (`0` new words, or at most `1–2` glue words) that
   recombine earlier lessons naturally.
 
-## One cohesive conversation (`B1–C2`)
+## One cohesive conversation (`A2–C2`)
 
-For a new `B1–C2` dialogue, write one continuous, realistic interaction in the
-recorded setting between exactly two speakers, sized to the level:
+For a new `A2–C2` dialogue, use `method: "conversation"` to write one
+continuous, realistic interaction in the recorded setting between exactly two
+speakers (`Standard` is the default length for `A2+`; `Short` is optional):
 
-- `B1`: `20–25` chunks (default `22`), `<= 11` words / `<= 18` CJK chars per
-  chunk, `8–12` new words/collocations, `1–3` consecutive sentences per turn.
-- `B2`: `22–26` chunks (default `25`), `<= 12` words / `<= 22` CJK chars per
-  chunk, `10–14` new words/collocations, `1–4` consecutive sentences per turn.
-- `C1`: `28–34` chunks (default `30`), `<= 15` words / `<= 26` CJK chars per
-  chunk, `12–16` new words/collocations, `1–4` consecutive sentences per turn.
-- `C2`: `28–34` chunks (default `32`), `<= 15` words / `<= 26` CJK chars per
-  chunk, `12–16` new words/collocations, `1–4` consecutive sentences per turn.
+### Guided Everyday Conversation (`A2`)
 
-Sentence count is separate from turn count. Keep each chunk to `1` main clause
-plus at most `1` short subordinate clause, and vary answer length within the
-level's turn cap (`1–3` consecutive sentences at `B1`, `1–4` at `B2–C2`) when an
-answer develops a reason, concrete example, or distinction; stop when the idea
-is complete. Echo new words and collocations `2–3×` naturally across partner
-prompt → learner answer → follow-up. The learner should carry roughly two thirds
-to three quarters of the words when the situation fits. The partner reacts and
-follows up naturally; do not insert another interview question after every
-sentence. Learner questions and brief clarifications are welcome.
+`A2` replaces mechanical 6-Cup drills with natural, believable everyday
+exchanges using simple constructs:
+
+- `A2`:
+  - `Standard` (default): `20–24` chunks (`24`), `8–10` new words.
+  - `Short`: `10–14` chunks (`12`), `4–6` new words.
+  - Per-chunk cap & turns: `<= 10` words / `<= 16` CJK chars per chunk; `1–2`
+    short sentences per turn (no strict `1:1` alternation required).
+- **Simple constructs & steady echo**: stick to simple everyday tenses, single
+  clauses, basic connectors (*because*, *when*, *but*, *usually*), and no heavy
+  slang or rare idioms. Keep exchanges believable and practical, and echo new
+  words `3–4×` naturally across the conversation.
+
+### Natural Learner-Led Conversation (`B1–C2`)
+
+- `B1`: `Standard` (default) `20–25` chunks (`22`), `8–12` new
+  words/collocations; `Short` `10–14` chunks (`12`), `5–7` new
+  words/collocations; `<= 11` words / `<= 18` CJK chars per chunk; `1–3`
+  consecutive sentences per turn.
+- `B2`: `Standard` (default) `22–26` chunks (`25`), `10–14` new
+  words/collocations; `Short` `10–15` chunks (`12`), `5–8` new
+  words/collocations; `<= 12` words / `<= 22` CJK chars per chunk; `1–4`
+  consecutive sentences per turn.
+- `C1`: `Standard` (default) `28–34` chunks (`30`), `12–16` new
+  words/collocations; `Short` `10–15` chunks (`12`), `5–8` new
+  words/collocations; `<= 15` words / `<= 26` CJK chars per chunk; `1–4`
+  consecutive sentences per turn.
+- `C2`: `Standard` (default) `28–34` chunks (`32`), `12–16` new
+  words/collocations; `Short` `10–15` chunks (`12`), `5–8` new
+  words/collocations; `<= 15` words / `<= 26` CJK chars per chunk; `1–4`
+  consecutive sentences per turn.
+
+Sentence count is separate from turn count. Keep each `B1–C2` chunk to `1` main
+clause plus at most `1` short subordinate clause, and vary answer length within
+the level's turn cap (`1–3` consecutive sentences at `B1`, `1–4` at `B2–C2`)
+when an answer develops a reason, concrete example, or distinction; stop when
+the idea is complete. Echo new words and collocations `2–3×` naturally across
+partner prompt → learner answer → follow-up. The learner should carry roughly
+two thirds to three quarters of the words when the situation fits. The partner
+reacts and follows up naturally; do not insert another interview question after
+every sentence. Learner questions and brief clarifications are welcome.
+
+### Shared conversation structure (`A2–C2`)
 
 Use five contiguous beats, normally `p1` through `p5`, distributed naturally
 across the level's chunk target without padding or forcing a speaker change at a
@@ -159,9 +201,10 @@ boundary:
 For new conversation drafts, use one sentence per `sentences` entry for practice
 and alignment. A developed answer spans consecutive entries by the same speaker.
 Retain an approved draft's existing chunks, including short combined sentences.
-An explicitly chosen monologue is casual first-person speech across a table,
-with a similar practical progression. Cups uses its connected `1:1` pattern
-rounds; do not impose conversation turn lengths on `method: "cups"`.
+An explicitly chosen monologue (or a 1-speaker source preserved via `keep`) is
+casual first-person speech across a table, with a similar practical progression.
+Cups (`A0–A1`) uses its connected `1:1` pattern rounds; do not impose
+conversation turn lengths on `method: "cups"`.
 
 ## Casting and facts
 
@@ -174,10 +217,13 @@ own speech and for the person addressed.
 Every dialogue entry repeats its explicit speaker name and fixed role:
 `speakers.learner` always has `turnRole: "response"`, including their questions;
 `speakers.partner` always has `turnRole: "prompt"`, including their reactions.
-Roles follow names, never row parity. In `conversation`, keep the same name and
-role across a multi-sentence answer; in `cups`, enforce strict `1:1` speaker
-alternation with `1` sentence per turn. Voice bindings remain consistent with
-those speakers; the CLI handles provider request construction.
+Roles follow names, never row parity. In `conversation` (`A2–C2` or a 2-speaker
+`keep` transcript), keep the same name and role across a multi-sentence answer;
+in `cups` (`A0–A1`), enforce strict `1:1` speaker alternation with `1` sentence
+per turn. For a `monologue` (`kind`/`method: "monologue"`, including a
+1-speaker `keep` transcript), use only the primary voice and omit `speaker` and
+`turnRole`. Voice bindings remain consistent with those speakers; the CLI
+handles provider request construction.
 
 ## Complete contextual vocabulary
 

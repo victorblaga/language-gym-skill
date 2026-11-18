@@ -67,7 +67,7 @@ or an unreachable daemon needs setup, not a paid recording attempt.
 Read the learner's known level, interests, recorded facts and relevant lesson
 summaries when available. Ask one concrete question at a time about missing
 information that matters. Do not make them repeat facts already supplied.
-For source material, establish whether they want faithful preservation,
+For source material, establish whether they want faithful preservation (`keep`),
 adaptation to their level, or several focused lessons.
 
 Reuse the selected language's recorded reading convention and spoken variety.
@@ -80,26 +80,40 @@ for readings, word boundaries and constituent meanings.
 
 Read [authoring rules](references/authoring.md) before creating or adapting a
 draft and when writing its contextual vocabulary. These carry the app's spoken
-register, 1-2-3 Cups, conversation, casting and lexicon requirements. Read
-[workspace files](references/workspace.md) for the untimed draft and bound
-lexicon format. Write `draft.json` in the workspace with stable practice IDs.
-For `A0–A2` dialogues (and `unknown` level), `method: "cups"` (1-2-3 Cups) is
-mandatory unless an explicit format or faithful-preservation request overrides
-it. For `B1–C2` dialogues, default to `method: "conversation"` (one cohesive
-two-speaker everyday conversation). Honor an explicit format (e.g. `monologue`)
-or faithful-preservation request, and leave existing recorded lessons untouched.
+register, 3-tier dialogue progression (`1-2-3 Cups` at `A0–A1`, `Guided
+Everyday Conversation` at `A2`, `Natural Learner-Led Conversation` at `B1–C2`),
+casting and lexicon requirements. Read [workspace files](references/workspace.md)
+for the untimed draft and bound lexicon format. Write `draft.json` in the
+workspace with stable practice IDs. Unless an explicit format or
+faithful-preservation (`keep`) request overrides it:
+
+- `A0` (`absolute_beginner`, `unknown`) and `A1`: use `method: "cups"`
+  (high-repetition pattern dialogue; `Short` is the default length, `Standard`
+  is optional).
+- `A2`: use `method: "conversation"` as a **Guided Everyday Conversation**
+  (`Standard` default, `Short` optional) with simple everyday constructs and
+  natural exchanges instead of mechanical 6-Cup drills.
+- `B1–C2`: use `method: "conversation"` as a **Natural Learner-Led
+  Conversation** (`Standard` default, `Short` optional).
+
+Honor an explicit format (e.g. `monologue`) or faithful-preservation (`keep`)
+request, and leave existing recorded lessons untouched. When faithfully
+preserving a source transcript (`keep`), auto-detect whether it is a 1-speaker
+monologue (`kind`/`method: "monologue"`) or a 2-speaker dialogue
+(`kind: "dialogue"`, `method: "conversation"`, stripping speaker labels onto
+`speaker` and `turnRole` fields) from the source transcript.
 
 ### Level Sizing & Method Table
 
-| Level | Method | Chunks (default) | Per-chunk cap | New vocab | Turn structure |
-| --- | --- | --- | --- | --- | --- |
-| `absolute_beginner` (`A0`) | `cups` | `16–20` (`18`, `3` rounds × `6`; Lesson 1 of a new language may use `12` / `2` rounds) | `<= 6` words / `<= 10` CJK chars | `4–6` new words | `1:1` alternation (`1` sentence/turn) |
-| `A1` | `cups` | `18–22` (`20`, `3` rounds) | `<= 8` words / `<= 13` CJK chars | `6–8` new words | `1:1` alternation (`1` sentence/turn) |
-| `A2` | `cups` | `20–24` (`24`, `4` rounds) | `<= 10` words / `<= 16` CJK chars | `8–10` new words | `1:1` alternation (`1` sentence/turn) |
-| `B1` | `conversation` | `20–25` (`22`) | `<= 11` words / `<= 18` CJK chars | `8–12` new words/collocations | `1–3` consecutive sentences/turn |
-| `B2` | `conversation` | `22–26` (`25`) | `<= 12` words / `<= 22` CJK chars | `10–14` new words/collocations | `1–4` consecutive sentences/turn |
-| `C1` | `conversation` | `28–34` (`30`) | `<= 15` words / `<= 26` CJK chars | `12–16` new words/collocations | `1–4` consecutive sentences/turn |
-| `C2` | `conversation` | `28–34` (`32`) | `<= 15` words / `<= 26` CJK chars | `12–16` new words/collocations | `1–4` consecutive sentences/turn |
+| Level | Method & tier | Default length | `Short` (chunks · new vocab) | `Standard` (chunks · new vocab) | Per-chunk cap | Turn structure |
+| --- | --- | --- | --- | --- | --- | --- |
+| `A0` (`absolute_beginner`, `unknown`) | `cups` (high-repetition pattern dialogue) | `Short` | `10–12` (`12`, `2` rounds) · `3–5` new words | `16–20` (`18`, `3` rounds) · `4–6` new words | `<= 6` words / `<= 10` CJK chars | `1:1` alternation (`1` complete sentence/turn) |
+| `A1` | `cups` (high-repetition pattern dialogue) | `Short` | `10–12` (`12`, `2` rounds) · `4–6` new words | `18–22` (`20`, `3` rounds) · `6–8` new words | `<= 8` words / `<= 13` CJK chars | `1:1` alternation (`1` complete sentence/turn) |
+| `A2` | `conversation` (Guided Everyday Conversation) | `Standard` | `10–14` (`12`) · `4–6` new words | `20–24` (`24`) · `8–10` new words | `<= 10` words / `<= 16` CJK chars | `1–2` short sentences/turn |
+| `B1` | `conversation` (Natural Learner-Led Conversation) | `Standard` | `10–14` (`12`) · `5–7` new words/collocations | `20–25` (`22`) · `8–12` new words/collocations | `<= 11` words / `<= 18` CJK chars | `1–3` consecutive sentences/turn |
+| `B2` | `conversation` (Natural Learner-Led Conversation) | `Standard` | `10–15` (`12`) · `5–8` new words/collocations | `22–26` (`25`) · `10–14` new words/collocations | `<= 12` words / `<= 22` CJK chars | `1–4` consecutive sentences/turn |
+| `C1` | `conversation` (Natural Learner-Led Conversation) | `Standard` | `10–15` (`12`) · `5–8` new words/collocations | `28–34` (`30`) · `12–16` new words/collocations | `<= 15` words / `<= 26` CJK chars | `1–4` consecutive sentences/turn |
+| `C2` | `conversation` (Natural Learner-Led Conversation) | `Standard` | `10–15` (`12`) · `5–8` new words/collocations | `28–34` (`32`) · `12–16` new words/collocations | `<= 15` words / `<= 26` CJK chars | `1–4` consecutive sentences/turn |
 
 Present the draft for content review before spending money on its recording.
 Honor review already given for an existing draft: resume from its approved text
